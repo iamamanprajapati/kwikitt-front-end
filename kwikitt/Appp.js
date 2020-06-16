@@ -11,8 +11,6 @@ import AsyncStorage from '@react-native-community/async-storage';
             this.state={
                 names:'',
                 serviceImages:'',
-                desc:'',
-                bookingTime:'',
                 servId:null,
                 userId:null
             }
@@ -31,8 +29,7 @@ import AsyncStorage from '@react-native-community/async-storage';
                 console.warn(response)
                 this.setState({
                     names:response.data.name,
-                    serviceImages:response.data.serviceImage,
-                    desc:response.data.description
+                    serviceImages:response.data.serviceImage
                 })
                 console.warn(this.state.names)
             })
@@ -50,24 +47,24 @@ import AsyncStorage from '@react-native-community/async-storage';
         const {addId} = this.props.route.params
         const {serviceImages} = this.state
         return(
-           <View style={{flex:1}}>
-               {/* <Image style={{width:120,height:120,alignSelf:'center',elevation:4}} source={{uri:`http://147.139.33.186/uploads/services/${serviceImages}`}}/> */}
-               <Image style={{width:140,height:140,alignSelf:'center',elevation:4}} source={require('../logo.png')}/>
-                    <Text style={{alignSelf:'center',fontWeight:'bold',fontSize:20}}>{this.state.names}</Text>
-                <Text style={{marginTop:'5%',marginLeft:'5%',}}><Text style={{fontWeight:'bold',fontSize:17}}>Description:</Text> {this.state.desc} </Text>
-                <TextInput
-                            placeholder="Service Timing Description"
-                            style={styles.textInput}
-                            onChangeText={(text) => {
-                                this.setState({ bookingTime: text })
-                            }}
-                        />
-                <TouchableOpacity
-                    style={{alignItems:'center'}}
+           <View style={{flex:1,alignItems:'center',backgroundColor:'white'}}>
+               <TextInput placeholder='Booking Remarks' />
+               <View style={{flex:.45,backgroundColor:'white',width:230,justifyContent:'center',marginTop:60,elevation:6}}>
+               <Image style={{width:120,height:120,alignSelf:'center',elevation:4}} source={{uri:`http://147.139.33.186/uploads/services/${serviceImages}`}}/>
+                <Text style={{alignSelf:'center',fontSize:20,fontWeight:'bold'}}>{this.state.names}</Text>
+               <Text style={{alignSelf:'center',fontSize:20,fontWeight:'bold',color:'red'}}>RS.100</Text>
+               </View>
+               <View style={{flex:.10}}>
+                    <TextInput placeholder="Booking Remarks"></TextInput>
+               </View>
+               <View style={{flex:.25}}>
+               <TouchableOpacity
+
+                    style={{}}
                     onPress={()=>{
                         axios.post('http://147.139.33.186/booking/place',{
                             addressId:addId,
-                            bookingRemarks:this.state.bookingTime,
+                            bookingRemarks:this.state.names,
                             customerId:this.state.userId,
                             paymentMethod:'COD',
                             serviceId:this.state.servId
@@ -85,7 +82,7 @@ import AsyncStorage from '@react-native-community/async-storage';
                                 <Text style={[styles.textSign, { color: '#fff' }]}>Place Order</Text>
                             </LinearGradient>
                         </TouchableOpacity>
-              
+               </View>
            </View>
             
         )
@@ -107,12 +104,5 @@ const styles = StyleSheet.create({
     textSign: {
         fontSize: 18,
         fontWeight: 'bold'
-    },
-    textInput: {
-        color: '#05375a',
-        margin:'3%',
-        marginTop:'6%',
-        borderWidth:1,
-
     },
 })

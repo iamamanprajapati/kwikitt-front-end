@@ -9,7 +9,6 @@ import ViewServices from './ViewServices'
 import Order from './Order/Order'
 import AsyncStorage from '@react-native-community/async-storage';
 
-
 export class CategoryScreen extends Component {
   constructor() {
     super()
@@ -24,14 +23,6 @@ export class CategoryScreen extends Component {
     this.refreshCategory();
     this.getData()
   }
-
-//   onSubmit = async (value) => {
-//     try {
-//         await AsyncStorage.setItem('token', '')
-//     } catch (e) {
-//         console.warn(e)
-//     }
-// }
 
   getData = async () => {
     try {
@@ -69,14 +60,12 @@ export class CategoryScreen extends Component {
                 <TouchableOpacity onPress={() =>{
                  
                   this.props.navigation.navigate('Services', { list })}}>
-                  <ImageBackground style={{ width: 170, height: 200, marginTop: 5, justifyContent: 'center', backgroundColor: 'white', elevation: 4 }}>
+                  <ImageBackground style={{ width: 170, height: 200, marginTop: '2%', justifyContent: 'center', backgroundColor: 'white', elevation: 4 }}>
                     <View>
                       <Image style={{ width: 120, height: 120, alignSelf: 'center', elevation: 4 }} source={{uri:`http://147.139.33.186/uploads/categories/${list.categoryImage}`}} />
                       <Text key={list.id} style={{ fontSize: 10, margin: 10, textAlign: 'center' }}>{list.name}</Text>
-                      <Text>{JSON.parse(this.state.userId)}</Text>
                     </View>
                   </ImageBackground>
-                  {/* <Button title="Remove" onPress={()=>this.onSubmit()} /> */}
                 </TouchableOpacity>
               ))
             }

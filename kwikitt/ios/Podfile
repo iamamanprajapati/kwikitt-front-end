@@ -79,6 +79,10 @@ target 'kwikitt' do
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
+  pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
+
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'kwikittTests' do
     inherit! :complete
     # Pods for testing

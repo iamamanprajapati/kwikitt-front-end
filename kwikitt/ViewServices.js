@@ -23,9 +23,9 @@ class ViewServices extends Component {
     render() {
         const {list}=this.props.route.params;
         return (
-            <View>
+            <View style={{flex:1}}>
                 <Header/>
-                <ScrollView>
+                <ScrollView style={{flex:1}}>
                 {
                     list.services.map(j=>(
                        <TouchableOpacity  onPress={()=>{
