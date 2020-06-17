@@ -18,12 +18,46 @@ export class CategoryScreen extends Component {
     }
   }
 
-
-  componentDidMount() {
-    this.refreshCategory();
-    this.getData()
+  renderToService=({list})=>{
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    this.props.navigation.navigate('Services', { list })
   }
 
+  refreshComponent = () =>{
+    this.refreshCategory();
+    this.getData()
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+   }
+
+
+  componentDidMount() {
+    this._unsubscribe = this.props.navigation.addListener('focus', () => this.refreshComponent())
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    this._unsubscribe();
+  }
+
+
+  handleBackButton = () => {
+    Alert.alert(
+        'Exit App',
+        'Exiting the application?', [{
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel'
+        }, {
+            text: 'OK',
+            onPress: () => BackHandler.exitApp()
+        }, ], {
+            cancelable: false
+        }
+     )
+     return true;
+   } 
+  
+  
   getData = async () => {
     try {
         const value = await AsyncStorage.getItem('token')
@@ -58,8 +92,8 @@ export class CategoryScreen extends Component {
             {
               data.map(list => (
                 <TouchableOpacity onPress={() =>{
-                 
-                  this.props.navigation.navigate('Services', { list })}}>
+                            this.renderToService({list})
+                  }}>
                   <ImageBackground style={{ width: 170, height: 200, marginTop: '2%', justifyContent: 'center', backgroundColor: 'white', elevation: 4 }}>
                     <View>
                       <Image style={{ width: 120, height: 120, alignSelf: 'center', elevation: 4 }} source={{uri:`http://147.139.33.186/uploads/categories/${list.categoryImage}`}} />
