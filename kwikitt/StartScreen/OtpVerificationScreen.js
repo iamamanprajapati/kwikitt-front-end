@@ -39,7 +39,7 @@ render(){
                 <View>
                     <TouchableOpacity style={{marginTop:20}}
                         onPress={()=>{
-                            axios.post('http://147.139.33.186/user/verify/otp/finish',{
+                            axios.post(`${global.MyVar}/user/verify/otp/finish`,{
                               otp:this.state.otp,
                               phone:data
                             }).then(response=>{

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { View, Text, TouchableOpacity, ImageBackground, StatusBar, Image, ScrollView,BackHandler,Alert,Button } from 'react-native'
+import { View, Text, TouchableOpacity,TouchableHighlight, ImageBackground, StatusBar, Image, ScrollView,BackHandler,Alert,Button,Dimensions } from 'react-native'
 import Banner from './Banner'
 import Header from './Header'
 import serviceApi from './ServiceApi'
@@ -9,9 +9,13 @@ import ViewServices from './ViewServices'
 import Order from './Order/Order'
 import AsyncStorage from '@react-native-community/async-storage';
 
+const Width = Dimensions.get('window').width;
+const W1=(Width/2)-5
+
 export class CategoryScreen extends Component {
   constructor() {
     super()
+    {global.MyVar}
     this.state = {
       data: [],
       userId:''
@@ -91,16 +95,16 @@ export class CategoryScreen extends Component {
           <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around', padding: 3 }}>
             {
               data.map(list => (
-                <TouchableOpacity onPress={() =>{
+                <TouchableHighlight onPress={() =>{
                             this.renderToService({list})
                   }}>
-                  <ImageBackground style={{ width: 170, height: 200, marginTop: '2%', justifyContent: 'center', backgroundColor: 'white', elevation: 4 }}>
-                    <View>
-                      <Image style={{ width: 120, height: 120, alignSelf: 'center', elevation: 4 }} source={{uri:`http://147.139.33.186/uploads/categories/${list.categoryImage}`}} />
-                      <Text key={list.id} style={{ fontSize: 10, margin: 10, textAlign: 'center' }}>{list.name}</Text>
+                  <ImageBackground style={{ width: W1, height: 200, marginTop: 2, justifyContent: 'center', backgroundColor: 'white', elevation: 4 }}>
+                    <View key={list.id}>
+                      <Image style={{ width: 150, height: 150, alignSelf: 'center', elevation: 4 }} source={{uri:`${global.MyVar}/uploads/categories/${list.categoryImage}`}} />
+                      <Text key={list.id} style={{ fontSize: 13, marginBottom: 20, textAlign: 'center' }}>{list.name}</Text>
                     </View>
                   </ImageBackground>
-                </TouchableOpacity>
+                </TouchableHighlight>
               ))
             }
           </View>

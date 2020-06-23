@@ -2,16 +2,34 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Platform, TextInput, StatusBar, CheckBox } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import axios from 'axios'
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 class EditAddress extends Component {
     constructor() {
         super()
+        {global.MyVar}
         this.state = {
             city: 'Shahjahanpur',
             street: '',
             pinCode: '242001',
-            state: 'Uttar Pradesh'
+            state: 'Uttar Pradesh',
+            userId:null
         }
+    }
+
+    getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('token')
+            const abcd = JSON.parse(value)
+            this.setState({ userId: abcd })
+        } catch (e) {
+            console.warn(e)
+        }
+    }
+
+    componentDidMount(){
+        this.getData()
     }
 
     render() {
@@ -74,12 +92,12 @@ class EditAddress extends Component {
                     <View>
                         <TouchableOpacity
                             onPress={() => {
-                                axios.post('http://147.139.33.186/api/address/add-or-update', {
+                                axios.post(`${global.MyVar}/api/address/add-or-update`, {
                                     city: this.state.city,
                                     street: this.state.street,
                                     pinCode: this.state.pinCode,
                                     state: this.state.state,
-                                    userId: 45,
+                                    userId: this.state.userId,
                                     id: id1
                                 }).then(response => {
                                     this.props.navigation.navigate('Address')

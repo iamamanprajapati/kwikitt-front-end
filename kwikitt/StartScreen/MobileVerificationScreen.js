@@ -8,10 +8,36 @@ import axios from 'axios'
 class  MobileVerificationScreen extends Component {
     constructor(props){
         super(props)
+        {global.MyVar}
         this.state={
             phone:''
         }
     }
+    
+    handleChange=(text) =>{
+        this.setState({
+            phone:text
+        })
+    }
+
+
+    CheckTextInput = () => {
+          if (this.state.phone.length >='10') {
+            axios.post(`${global.MyVar}/user/verify/otp/init`,{
+                phone:this.state.phone
+              }).then(response=>{
+                this.props.navigation.navigate('OtpVerificationScreen',{
+                  data:this.state.phone
+                })
+              }).catch(error=>{
+                console.log(error)
+              })
+          } else {
+            alert('Please Enter Mobile number');
+          }
+        } 
+      
+
 
 render(){
     return (
@@ -30,28 +56,23 @@ render(){
                         color='#05375a'
                         size={30}
                     />
-                        <TextInput 
+
+                        <TextInput
                             placeholder="Enter Your Mobile"
                             style={styles.textInput}
                             keyboardType='number-pad'
-                            onChangeText={(text)=>{
-                            this.setState({phone:text})
-                        }}/>
+                            onChangeText={this.handleChange}
+                            maxLength={10}
+                            value={this.state.phone}
+                        />   
+
                 </View>
                 <View>
                     <TouchableOpacity style={{marginTop:20}} 
-                        onPress={()=>{
-                            axios.post('http://147.139.33.186/user/verify/otp/init',{
-                              phone:this.state.phone
-                            }).then(response=>{
-                              console.warn(response)
-                              this.props.navigation.navigate('OtpVerificationScreen',{
-                                data:this.state.phone
-                              })
-                            }).catch(error=>{
-                              console.log(error)
-                            })
-                          }}
+                        onPress={()=>
+                            this.CheckTextInput()
+                        }
+                            
                     >
                     <LinearGradient
                         onPress={()=>alert('button')}

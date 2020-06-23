@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-community/async-storage';
  class PlaceOrder extends Component {
         constructor(){
             super()
-            
+            {global.MyVar}
             this.state={
                 names:'',
                 serviceImages:'',
@@ -19,22 +19,19 @@ import AsyncStorage from '@react-native-community/async-storage';
         }
 
     getData = async () => {
-        console.warn('getting')
         try {
             const value1 = await AsyncStorage.getItem('token')
             const abcd = JSON.parse(value1)
             const value2 = await AsyncStorage.getItem('orderId')
             const serviceId = JSON.parse(value2)
             this.setState({servId:serviceId,userId:abcd})
-            axios.get(`http://147.139.33.186/service/${serviceId}`)
+            axios.get(`${global.MyVar}/service/${serviceId}`)
             .then((response)=>{
-                console.warn(response)
                 this.setState({
                     names:response.data.name,
                     serviceImages:response.data.serviceImage,
                     desc:response.data.description
                 })
-                console.warn(this.state.names)
             })
         } catch (e) {
             console.warn(e)
@@ -51,8 +48,8 @@ import AsyncStorage from '@react-native-community/async-storage';
         const {serviceImages} = this.state
         return(
            <View style={{flex:1}}>
-               {/* <Image style={{width:120,height:120,alignSelf:'center',elevation:4}} source={{uri:`http://147.139.33.186/uploads/services/${serviceImages}`}}/> */}
-               <Image style={{width:140,height:140,alignSelf:'center',elevation:4}} source={require('../logo.png')}/>
+               <Image style={{width:120,height:120,alignSelf:'center',elevation:4}} source={{uri:`${global.MyVar}/uploads/services/${serviceImages}`}}/>
+               {/* <Image style={{width:140,height:140,alignSelf:'center',elevation:4}} source={require('../logo.png')}/> */}
                     <Text style={{alignSelf:'center',fontWeight:'bold',fontSize:20}}>{this.state.names}</Text>
                 <Text style={{marginTop:'5%',marginLeft:'5%',}}><Text style={{fontWeight:'bold',fontSize:17}}>Description:</Text> {this.state.desc} </Text>
                 <TextInput
@@ -65,7 +62,7 @@ import AsyncStorage from '@react-native-community/async-storage';
                 <TouchableOpacity
                     style={{alignItems:'center'}}
                     onPress={()=>{
-                        axios.post('http://147.139.33.186/booking/place',{
+                        axios.post(`${global.MyVar}/booking/place`,{
                             addressId:addId,
                             bookingRemarks:this.state.bookingTime,
                             customerId:this.state.userId,

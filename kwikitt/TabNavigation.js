@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { ProfileScreen } from './TabScreen/ProfileScreen'
-import { UpdateScreen } from "./TabScreen/UpdateScreen";
+import Feather from 'react-native-vector-icons/Feather'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { PartnerScreen } from './TabScreen/PartnerScreen'
+import { ProfileScreen } from "./TabScreen/ProfileScreen";
 import { MyOrders } from "./TabScreen/MyOrders";
 import { Home } from "./Home";
-
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -32,25 +33,13 @@ export class TabNavigation extends Component {
                 />
 
                 <Tab.Screen
-                    name="Profile"
-                    component={ProfileScreen}
+                    name="PartnerScreen"
+                    component={PartnerScreen}
                     options={{
-                        tabBarLabel: 'Profile',
+                        tabBarLabel: 'Partner',
                         tabBarColor: '#40008c',
                         tabBarIcon: ({ color }) => (
-                            <MaterialCommunityIcons name="profile" color={color} size={26} />
-                        ),
-                    }}
-                />
-
-                <Tab.Screen
-                    name="Update"
-                    component={UpdateScreen}
-                    options={{
-                        tabBarLabel: 'Update',
-                        tabBarColor: '#40008c',
-                        tabBarIcon: ({ color }) => (
-                            <MaterialCommunityIcons name="update" color={color} size={26} />
+                            <FontAwesome name="handshake-o" color={color} size={26} />
                         ),
                     }}
                 />
@@ -59,10 +48,22 @@ export class TabNavigation extends Component {
                     name="MyOrders"
                     component={MyOrders}
                     options={{
-                        tabBarLabel: 'MyOrders',
+                        tabBarLabel: 'Orders',
                         tabBarColor: '#40008c',
                         tabBarIcon: ({ color }) => (
-                            <MaterialCommunityIcons name="orders" color={color} size={26} />
+                            <MaterialCommunityIcons name="cart-outline" color={color} size={26} />
+                        ),
+                    }}
+                />      
+
+                <Tab.Screen
+                    name="ProfileScreen"
+                    component={ProfileScreen}
+                    options={{
+                        tabBarLabel: 'Profile',
+                        tabBarColor: '#40008c',
+                        tabBarIcon: ({ color }) => (
+                            <Feather name="user" color={color} size={26} />
                         ),
                     }}
                 />

@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 export class Address extends Component {
     constructor() {
         super();
+        {global.MyVar}
         this.state = {
             data: [],
             userId: null,
@@ -16,28 +17,34 @@ export class Address extends Component {
     }
 
     getData = async () => {
-        console.warn('getting')
         try {
             const value = await AsyncStorage.getItem('token')
             const abcd = JSON.parse(value)
             this.setState({ userId: abcd })
-            console.warn(this.state.userId)
                 const id = this.state.userId
-                axios.get(`http://147.139.33.186/api/address/list/${id}`)
+                axios.get(`${global.MyVar}/api/address/list/${id}`)
             .then(response => {
                 this.setState({
                     data: response.data.data,
                 })
             })
         } catch (e) {
-            console.warn(e)
+           
         }
     }
 
-    componentDidMount() {
+    refreshComponent = () =>{
         this.getData()
-    }
+       }
+    
+    
+      componentDidMount() {
+        this._unsubscribe = this.props.navigation.addListener('focus', () => this.refreshComponent())
+      }
 
+    componentWillUnmount() {
+        this._unsubscribe();
+      }
     render() {
         const { data } = this.state
         return (
@@ -102,7 +109,7 @@ export class Address extends Component {
                                             <View style={{ flex: .33 }}>
                                                 <TouchableOpacity style={{ borderRadius: 5, height: 40, width: 40 }}
                                                     onPress={() => {
-                                                        axios.delete(`http://147.139.33.186/api/address/delete/${j.id}`)
+                                                        axios.delete(`${global.MyVar}/api/address/delete/${j.id}`)
                                                             .then(response => {
                                                                 this.componentDidMount();
                                                             })

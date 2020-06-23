@@ -8,18 +8,17 @@ import AsyncStorage from '@react-native-community/async-storage';
 class SplashScreen extends Component {
     constructor(){
         super()
+        global.MyVar='http://42fc95509e07.ngrok.io'
         this.state={
             userId:null
         }
     }
 
     getData = async () => {
-        console.warn('getting')
         try {
             const value = await AsyncStorage.getItem('token')
             const abcd = JSON.parse(value)
             this.setState({ userId: abcd })
-            console.warn(this.state.userId)
             if(this.state.userId!=null){
                 this.props.navigation.navigate('HomeScreen')
             }

@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 class RegistrationScreen extends Component {
     constructor() {
         super()
+        {global.MyVar}
         this.state = {
             email: '',
             name: '',
@@ -30,18 +31,37 @@ class RegistrationScreen extends Component {
 
 
     validate = (text) => {
-        console.log(text);
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if (reg.test(text) === false) {
-            console.log("Email is Not Correct");
             this.setState({ email: text })
             return false;
         }
         else {
             this.setState({ email: text })
-            console.log("Email is Correct");
         }
     }
+
+    CheckTextInput = (data1) => {
+        if (this.state.email != '') {
+          if (this.state.name != '') {
+            axios.post(`${global.MyVar}/user/register`, {
+                email: this.state.email,
+                name: this.state.name,
+                phone: data1,
+                roles: this.state.roles
+            }).then(response => {
+                this.onSubmit(response.data.data.id)
+                this.props.navigation.navigate('HomeScreen')
+            }).catch(error => {
+                console.warn(error)
+            })
+          } else {
+            alert('Please Enter Name');
+          }
+        } else {
+          alert('Please Enter Email');
+        }
+      };
 
 
 
@@ -113,23 +133,10 @@ class RegistrationScreen extends Component {
                         <Text style={styles.label}>Do you want to be make service provider?</Text>
                     </View>
                     <View>
-                        <Text>{data1}</Text>
-                    </View>
-                    <View>
                         <TouchableOpacity
-                            onPress={() => {
-                                axios.post('http://147.139.33.186/user/register', {
-                                    email: this.state.email,
-                                    name: this.state.name,
-                                    phone: data1,
-                                    roles: this.state.roles
-                                }).then(response => {
-                                    this.onSubmit(response.data.data.id)
-                                    this.props.navigation.navigate('HomeScreen')
-                                }).catch(error => {
-                                    console.warn(error)
-                                })
-                            }}
+                           onPress={()=>
+                                this.CheckTextInput(data1)
+                            }
                         >
                             <LinearGradient
                                 colors={['#08d4c4', '#01ab9d']}

@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 class AddAddress extends Component {
     constructor() {
         super()
+        {global.MyVar}
         this.state = {
             city: 'Shahjahanpur',
             street: '',
@@ -17,12 +18,10 @@ class AddAddress extends Component {
     }
 
     getData = async () => {
-        console.warn('getting')
         try {
             const value = await AsyncStorage.getItem('token')
             const abcd = JSON.parse(value)
             this.setState({ userId: abcd })
-            console.warn(this.state.userId)
         } catch (e) {
             console.warn(e)
         }
@@ -92,7 +91,7 @@ class AddAddress extends Component {
                     <View>
                         <TouchableOpacity
                             onPress={() => {
-                                axios.post('http://147.139.33.186/api/address/add-or-update', {
+                                axios.post(`${global.MyVar}/api/address/add-or-update`, {
                                     city: this.state.city,
                                     street: this.state.street,
                                     pinCode: this.state.pinCode,

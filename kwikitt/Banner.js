@@ -31,7 +31,7 @@ export default class Banner extends Component {
             <View style={styles.container}>
                 <Carousel
                     autoplay
-                    autoplayTimeout={3000}
+                    autoplayTimeout={10000}
                     loop
                     index={0}
                     pageSize={BannerWidth}
@@ -47,10 +47,10 @@ export default class Banner extends Component {
         );
     }
 }
- 
+
 const styles = StyleSheet.create({
     container: {
-        marginTop:5,
+        marginTop:2,
         flex: .30,
         height:165,
         backgroundColor: '#fff',
