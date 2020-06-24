@@ -22,7 +22,7 @@ export class MyOrders extends Component {
             const abcd = JSON.parse(value)
             this.setState({ userId: abcd })
                 const id = this.state.userId
-                axios.get(`http://f9b29519e08d.ngrok.io/booking/list/${id}`)
+                axios.get(`${global.MyVar}/booking/list/${id}`)
             .then(response => {
                 this.setState({
                     data: response.data.data,
@@ -66,7 +66,7 @@ export class MyOrders extends Component {
                                 <Text style={{marginLeft:10,marginTop:10,fontSize:10,color:'green'}}>{'\u2B24'}<Text style={{fontSize:12}}>{list.bookingDate}</Text></Text>
                                 </View>
                                 <View style={{flex:1,justifyContent:'center'}}>
-                                <Image style={{height:100,width:100}} source={{uri:`http://f9b29519e08d.ngrok.io/uploads/services/${list.service.serviceImage}`}}/>
+                                <Image style={{height:100,width:100}} source={{uri:`${global.MyVar}/uploads/services/${list.service.serviceImage}`}}/>
                             </View>
                             </View>
                         </View>

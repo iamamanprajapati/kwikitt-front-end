@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 class SplashScreen extends Component {
     constructor(){
         super()
-        global.MyVar='http://42fc95509e07.ngrok.io'
+        global.MyVar='http://fe6929445222.ngrok.io'
         this.state={
             userId:null
         }

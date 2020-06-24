@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { View, Text, TextInput, Button, TouchableOpacity, ImageBackground, StyleSheet, StatusBar, Image, ScrollView } from 'react-native'
+import { View, Text, TextInput, Button, TouchableOpacity, ImageBackground, StyleSheet, StatusBar, Image, ScrollView,Dimensions,TouchableHighlight } from 'react-native'
 import { Icon } from 'react-native-elements'
 import LinearGradient from 'react-native-linear-gradient'
 import AsyncStorage from '@react-native-community/async-storage';
+
+
+const Width = Dimensions.get('window').width;
 
 export class Address extends Component {
     constructor() {
@@ -12,7 +15,11 @@ export class Address extends Component {
         this.state = {
             data: [],
             userId: null,
-            orderId:null
+            orderId:null,
+            names:'',
+            serviceImages:'',
+            desc:'',
+            servId:null,
         }
     }
 
@@ -20,12 +27,22 @@ export class Address extends Component {
         try {
             const value = await AsyncStorage.getItem('token')
             const abcd = JSON.parse(value)
-            this.setState({ userId: abcd })
+            const value2 = await AsyncStorage.getItem('orderId')
+            const serviceId = JSON.parse(value2)
+            this.setState({ servId:serviceId,userId: abcd })
                 const id = this.state.userId
                 axios.get(`${global.MyVar}/api/address/list/${id}`)
             .then(response => {
                 this.setState({
                     data: response.data.data,
+                })
+            })
+            axios.get(`${global.MyVar}/service/${serviceId}`)
+            .then((response)=>{
+                this.setState({
+                    names:response.data.name,
+                    serviceImages:response.data.serviceImage,
+                    desc:response.data.description
                 })
             })
         } catch (e) {
@@ -47,24 +64,32 @@ export class Address extends Component {
       }
     render() {
         const { data } = this.state
+        const {serviceImages} = this.state
         return (
             <View style={{ flex: 1 }}>
-                <View>
-                    <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('AddAddress',{id:this.state.userId})}
-                    >
-                        <LinearGradient
-                            colors={['#08d4c4', '#01ab9d']}
-                            style={styles.signIn}
-                        >
-                            <Text style={[styles.textSign, { color: '#fff' }]}>+ Add New Address</Text>
-                        </LinearGradient>
-                    </TouchableOpacity>
+                            <View>
+                                <TouchableOpacity
+                                    onPress={() => this.props.navigation.navigate('AddAddress',{id:this.state.userId})}
+                                >
+                                    <LinearGradient
+                                        colors={['#08d4c4', '#01ab9d']}
+                                        style={styles.signIn}
+                                    >
+                                        <Text style={[styles.textSign, { color: '#fff' }]}>+ Add New Address</Text>
+                                    </LinearGradient>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{flex:1}}>
+                            <View style={{width:Width}}>
+                        <Image style={{width:120,height:120,alignSelf:'center',elevation:4}} source={{uri:`${global.MyVar}/uploads/services/${serviceImages}`}}/>
+                                <Text style={{alignSelf:'center',fontWeight:'bold',fontSize:20}}>{this.state.names}</Text>
+                            <Text style={{marginTop:'5%',marginLeft:'5%',}}><Text style={{fontWeight:'bold',fontSize:15}}>Description:</Text> {this.state.desc} </Text>
+                    </View>
                 </View>
-                <ScrollView>
+                <ScrollView style={{flex:1}}>
                     {
                         data.map(j => (
-                            <TouchableOpacity
+                            <TouchableHighlight
                                 onPress={()=>this.props.navigation.navigate('placeOrder',{addId:j.id})}
                             >
                                 <ImageBackground style={{ marginTop: 5, marginLeft: 5, marginRight: 5, padding: 5, backgroundColor: 'white', borderWidth: 4, borderColor: 'white', marginTop: 4, elevation: 4, height: 170 }}>
@@ -79,7 +104,7 @@ export class Address extends Component {
                                         </View>
                                         <View style={{ flex: .25, justifyContent: 'center', alignItems: 'center' }}>
                                             <View style={{ flex: .33 }}>
-                                                <TouchableOpacity style={{ borderRadius: 5, height: 40, width: 40 }}
+                                                <TouchableHighlight style={{ borderRadius: 5, height: 40, width: 40 }}
                                                     onPress={() => {
                                                         this.props.navigation.navigate('EditAddress', {
                                                             id1: j.id, street1: j.street
@@ -93,10 +118,10 @@ export class Address extends Component {
                                                         type='font-awesome'
                                                         color='green'
                                                     />
-                                                </TouchableOpacity>
+                                                </TouchableHighlight>
                                             </View>
                                             <View style={{ flex: .33 }}>
-                                                <TouchableOpacity style={{ borderRadius: 5, height: 40, width: 40 }}>
+                                                <TouchableHighlight style={{ borderRadius: 5, height: 40, width: 40 }}>
                                                     <Icon
                                                         size={20}
                                                         reverse
@@ -104,10 +129,10 @@ export class Address extends Component {
                                                         type='font-awesome'
                                                         color='orange'
                                                     />
-                                                </TouchableOpacity>
+                                                </TouchableHighlight>
                                             </View>
                                             <View style={{ flex: .33 }}>
-                                                <TouchableOpacity style={{ borderRadius: 5, height: 40, width: 40 }}
+                                                <TouchableHighlight style={{ borderRadius: 5, height: 40, width: 40 }}
                                                     onPress={() => {
                                                         axios.delete(`${global.MyVar}/api/address/delete/${j.id}`)
                                                             .then(response => {
@@ -122,12 +147,12 @@ export class Address extends Component {
                                                         type='AntDesign'
                                                         color='red'
                                                     />
-                                                </TouchableOpacity>
+                                                </TouchableHighlight>
                                             </View>
                                         </View>
                                     </View>
                                 </ImageBackground>
-                            </TouchableOpacity>
+                            </TouchableHighlight>
                         ))
                     }
                 </ScrollView>
