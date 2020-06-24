@@ -64,6 +64,7 @@ export class MyOrders extends Component {
                                 <Text style={{fontSize:16,marginLeft:10}} >{list.service.name}</Text>
                                     <Text>{list.rating}</Text>
                                 <Text style={{marginLeft:10,marginTop:10,fontSize:10,color:'green'}}>{'\u2B24'}<Text style={{fontSize:12}}>{list.bookingDate}</Text></Text>
+                                <Text style={{marginLeft:10,marginTop:18,fontSize:15,color:'red'}}>{list.bookingStatus}</Text>
                                 </View>
                                 <View style={{flex:1,justifyContent:'center'}}>
                                 <Image style={{height:100,width:100}} source={{uri:`${global.MyVar}/uploads/services/${list.service.serviceImage}`}}/>
