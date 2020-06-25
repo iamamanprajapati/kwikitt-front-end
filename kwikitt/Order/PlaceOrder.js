@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View,Text,Image,Button,StyleSheet,TouchableOpacity,TextInput} from 'react-native'
+import {View,Text,Image,Button,StyleSheet,TouchableOpacity,TextInput,ImageBackground} from 'react-native'
 import axios from 'axios'
 import LinearGradient from 'react-native-linear-gradient'
 import AsyncStorage from '@react-native-community/async-storage';
@@ -44,12 +44,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 
     render() {
 
-        const {addId} = this.props.route.params
+        const {addId,street,city,state,pinCode} = this.props.route.params
         const {serviceImages} = this.state
         return(
            <View style={{flex:1}}>
                <Image style={{width:120,height:120,alignSelf:'center',elevation:4}} source={{uri:`${global.MyVar}/uploads/services/${serviceImages}`}}/>
-               {/* <Image style={{width:140,height:140,alignSelf:'center',elevation:4}} source={require('../logo.png')}/> */}
                     <Text style={{alignSelf:'center',fontWeight:'bold',fontSize:20}}>{this.state.names}</Text>
                 <Text style={{marginTop:'5%',marginLeft:'5%',}}><Text style={{fontWeight:'bold',fontSize:17}}>Description:</Text> {this.state.desc} </Text>
                 <TextInput
@@ -82,7 +81,17 @@ import AsyncStorage from '@react-native-community/async-storage';
                                 <Text style={[styles.textSign, { color: '#fff' }]}>Place Order</Text>
                             </LinearGradient>
                         </TouchableOpacity>
-              
+
+                        <ImageBackground style={{ marginTop: 25, marginLeft: 5, marginRight: 5, padding: 5, backgroundColor: 'white', borderWidth: 4, borderColor: 'white', elevation: 4, height: 150 }}>
+                                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                                        <View style={{ flex: 1, flexDirection: 'column' }}>
+                                            <Text>{city},</Text>
+                                            <Text>{pinCode},</Text>
+                                            <Text >{street},</Text>
+                                            <Text>{state},</Text>
+                                        </View>
+                                    </View>
+                        </ImageBackground>
            </View>
             
         )

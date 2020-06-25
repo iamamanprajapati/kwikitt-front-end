@@ -1,16 +1,18 @@
 import React, { Component } from 'react'
-import { View, Text, Button, Dimensions, StyleSheet, Image,TouchableOpacity,StatusBar, } from 'react-native'
+import { View, Text, Button, Dimensions, StyleSheet, Image,TouchableOpacity,StatusBar, Linking,Alert } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import * as Animatable from 'react-native-animatable'
 import AsyncStorage from '@react-native-community/async-storage';
+import axios from 'axios'
 
 class SplashScreen extends Component {
     constructor(){
         super()
-        global.MyVar='http://fe6929445222.ngrok.io'
+        global.MyVar='http://120931a3a65f.ngrok.io'
         this.state={
-            userId:null
+            userId:null,
+            
         }
     }
 
@@ -22,17 +24,37 @@ class SplashScreen extends Component {
             if(this.state.userId!=null){
                 this.props.navigation.navigate('HomeScreen')
             }
+            axios.post(`${global.MyVar}/app-version/validate`,{
+                platform:'ANDROID',
+                version:'1.0.0'
+            })
+            .then(response=>{
+                if(response.data.data.status===false){
+                    Alert.alert(
+                        'please update the app to use our services',
+                        'Would you like to authenticate using fingerprint ?',
+                        [
+                          {text: 'Yes', onPress: this.openURL},
+                        ],
+                        { cancelable: false }
+                      )
+                    
+                }
+            })
             
         } catch (e) {
             console.warn(e)
         }
     }
 
+    openURL=()=>{
+        Linking.openURL("market://details?id=com.spotify.music")
+    }
+
     componentDidMount(){
         this.getData()
     }
 
-    
     render(){
     return (
         (this.state.userId===null) ? 
@@ -71,8 +93,8 @@ class SplashScreen extends Component {
             </Animatable.View>
         </View>
         :
-        <View>
-            <Text>hi</Text>
+        <View style={{backgroundColor:'#009387'}}>
+            
         </View>
     )
 }      
@@ -82,7 +104,7 @@ class SplashScreen extends Component {
 export default SplashScreen;
 
 const { height } = Dimensions.get('screen');
-const height_logo = height * .28;
+const height_logo = height * .50;
 
 const styles = StyleSheet.create({
     container: {
@@ -104,7 +126,8 @@ const styles = StyleSheet.create({
     },
     logo: {
         width: height_logo,
-        height: height_logo
+        height: height_logo,
+        marginTop:100
     },
     title: {
         color: '#05375a',

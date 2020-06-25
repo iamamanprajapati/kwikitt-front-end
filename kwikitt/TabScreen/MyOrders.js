@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import {View,Text,TouchableOpacity,ImageBackground,Image,ScrollView} from 'react-native'
+import {View,Text,TouchableOpacity,ImageBackground,Image,ScrollView,ActivityIndicator} from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios'
 import {Header} from '../Header'
+import Timestamp from 'react-timestamp';
 
 export class MyOrders extends Component {
 
@@ -12,7 +13,8 @@ export class MyOrders extends Component {
         this.state={
           data:[],
           serviceName:'',
-          userId:null
+          userId:null,
+          isLoading:true
         }
       } 
 
@@ -26,6 +28,7 @@ export class MyOrders extends Component {
             .then(response => {
                 this.setState({
                     data: response.data.data,
+                    isLoading:false
                 })
             })
         } catch (e) {
@@ -47,9 +50,12 @@ export class MyOrders extends Component {
 
     render() {
 
-        const {data} = this.state
+        const {data,isLoading} = this.state
 
         return (
+            (isLoading===true)?
+            <ActivityIndicator style={{flex:1}} animating={true} size="large" color="#0000ff" />
+            :
             <View style={{flex:1}}>
                 <Header/>
             <ScrollView style={{flex:1}}>
@@ -63,8 +69,8 @@ export class MyOrders extends Component {
                                 <View style={{flex:2}}>
                                 <Text style={{fontSize:16,marginLeft:10}} >{list.service.name}</Text>
                                     <Text>{list.rating}</Text>
-                                <Text style={{marginLeft:10,marginTop:10,fontSize:10,color:'green'}}>{'\u2B24'}<Text style={{fontSize:12}}>{list.bookingDate}</Text></Text>
-                                <Text style={{marginLeft:10,marginTop:18,fontSize:15,color:'red'}}>{list.bookingStatus}</Text>
+                                    <Text style={{marginLeft:10,marginTop:10,fontSize:10,color:'green'}}>{'\u2B24'}<Text style={{fontSize:12}}>  <Timestamp time={(list.bookingDate)/1000} format='full' component={Text} /></Text></Text>
+                                <Text style={{marginLeft:12,marginTop:20,fontSize:14,color:'red'}}>{list.bookingStatus}</Text>
                                 </View>
                                 <View style={{flex:1,justifyContent:'center'}}>
                                 <Image style={{height:100,width:100}} source={{uri:`${global.MyVar}/uploads/services/${list.service.serviceImage}`}}/>

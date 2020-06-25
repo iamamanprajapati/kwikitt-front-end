@@ -38,8 +38,7 @@ class ViewServices extends Component {
                         <View key={j.id}  style={{flex:1,flexDirection:'row'}}>
                             <View style={{flex:1.8}}>
                                 <View style={{flex:2}}>
-                                <Text style={{fontSize:25,marginLeft:10,fontWeight:'bold'}} >{j.name}</Text>
-                                <Text style={{marginLeft:10,fontSize:10}}>{j.description}</Text>
+                                <Text style={{fontSize:20,marginLeft:10,fontWeight:'bold'}} >{j.name}</Text>
                                 </View>
                                 
                             </View>

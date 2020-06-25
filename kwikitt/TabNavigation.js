@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {ActivityIndicator} from 'react-native'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather'
@@ -16,8 +17,8 @@ export class TabNavigation extends Component {
         return (
             <Tab.Navigator
                 initialRouteName="Home"
-                activeColor="#e91e63"
-                style={{ backgroundColor: 'tomato' }}
+                activeColor="white"
+                style={{ backgroundColor: '#009387' }}
             >
 
                 <Tab.Screen
@@ -25,7 +26,7 @@ export class TabNavigation extends Component {
                     component={Home}
                     options={{
                         tabBarLabel: 'Home',
-                        tabBarColor: '#40008c',
+                        tabBarColor: '#009387',
                         tabBarIcon: ({ color }) => (
                             <MaterialCommunityIcons name="home" color={color} size={26} />
                         ),
@@ -37,7 +38,7 @@ export class TabNavigation extends Component {
                     component={PartnerScreen}
                     options={{
                         tabBarLabel: 'Partner',
-                        tabBarColor: '#40008c',
+                        tabBarColor: '#009387',
                         tabBarIcon: ({ color }) => (
                             <FontAwesome name="handshake-o" color={color} size={26} />
                         ),
@@ -49,7 +50,7 @@ export class TabNavigation extends Component {
                     component={MyOrders}
                     options={{
                         tabBarLabel: 'Orders',
-                        tabBarColor: '#40008c',
+                        tabBarColor: '#009387',
                         tabBarIcon: ({ color }) => (
                             <MaterialCommunityIcons name="cart-outline" color={color} size={26} />
                         ),
@@ -61,7 +62,7 @@ export class TabNavigation extends Component {
                     component={ProfileScreen}
                     options={{
                         tabBarLabel: 'Profile',
-                        tabBarColor: '#40008c',
+                        tabBarColor: '#009387',
                         tabBarIcon: ({ color }) => (
                             <Feather name="user" color={color} size={26} />
                         ),

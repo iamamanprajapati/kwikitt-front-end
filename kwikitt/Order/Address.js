@@ -5,7 +5,6 @@ import { Icon } from 'react-native-elements'
 import LinearGradient from 'react-native-linear-gradient'
 import AsyncStorage from '@react-native-community/async-storage';
 
-
 const Width = Dimensions.get('window').width;
 
 export class Address extends Component {
@@ -50,6 +49,15 @@ export class Address extends Component {
         }
     }
 
+    onSubmit = async (value) => {
+        try {
+            await AsyncStorage.setItem('token', JSON.stringify(value))
+        } catch (e) {
+            console.warn(e)
+        }
+    }
+  
+
     refreshComponent = () =>{
         this.getData()
        }
@@ -90,7 +98,13 @@ export class Address extends Component {
                     {
                         data.map(j => (
                             <TouchableHighlight
-                                onPress={()=>this.props.navigation.navigate('placeOrder',{addId:j.id})}
+                                onPress={()=>this.props.navigation.navigate('placeOrder',{
+                                    addId:j.id,
+                                    street:j.street,
+                                        city:j.city,
+                                        state:j.state,
+                                        pinCode:j.pinCode
+                                    })}
                             >
                                 <ImageBackground style={{ marginTop: 5, marginLeft: 5, marginRight: 5, padding: 5, backgroundColor: 'white', borderWidth: 4, borderColor: 'white', marginTop: 4, elevation: 4, height: 170 }}>
                                     <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -99,8 +113,7 @@ export class Address extends Component {
                                             <Text>{j.pinCode},</Text>
                                             <Text >{j.street},</Text>
                                             <Text>{j.state},</Text>
-                                            <Text>{j.id}</Text>
-                                            <Text>{this.state.userId}</Text>
+                                           
                                         </View>
                                         <View style={{ flex: .25, justifyContent: 'center', alignItems: 'center' }}>
                                             <View style={{ flex: .33 }}>
@@ -120,17 +133,7 @@ export class Address extends Component {
                                                     />
                                                 </TouchableHighlight>
                                             </View>
-                                            <View style={{ flex: .33 }}>
-                                                <TouchableHighlight style={{ borderRadius: 5, height: 40, width: 40 }}>
-                                                    <Icon
-                                                        size={20}
-                                                        reverse
-                                                        name='check-square-o'
-                                                        type='font-awesome'
-                                                        color='orange'
-                                                    />
-                                                </TouchableHighlight>
-                                            </View>
+                                          
                                             <View style={{ flex: .33 }}>
                                                 <TouchableHighlight style={{ borderRadius: 5, height: 40, width: 40 }}
                                                     onPress={() => {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { View, Text, TouchableOpacity,TouchableHighlight, ImageBackground, StatusBar, Image, ScrollView,BackHandler,Alert,Button,Dimensions } from 'react-native'
+import { View, Text, TouchableOpacity,TouchableHighlight,ActivityIndicator, ImageBackground, StatusBar, Image, ScrollView,BackHandler,Alert,Button,Dimensions } from 'react-native'
 import Banner from './Banner'
 import Header from './Header'
 import serviceApi from './ServiceApi'
@@ -18,7 +18,8 @@ export class CategoryScreen extends Component {
     {global.MyVar}
     this.state = {
       data: [],
-      userId:''
+      userId:'',
+      isLoading:true
     }
   }
 
@@ -74,13 +75,17 @@ export class CategoryScreen extends Component {
 
   refreshCategory = () => {
     serviceApi.retrieveAllCategory().then((response) => {
-      this.setState({ data: response.data.data });
+      this.setState({ data: response.data.data,isLoading:false });
     });
   };
 
   render() {
     const { data } = this.state
+    const {isLoading} =this.state
     return (
+      (isLoading===true)?
+      <ActivityIndicator style={{flex:1}} animating={true} size="large" color="#0000ff" />
+      :
       <View style={{ flex: 1, backgroundColor: 'rgb(241, 243, 246)' }}>
         <StatusBar
           barStyle="dark-content"
