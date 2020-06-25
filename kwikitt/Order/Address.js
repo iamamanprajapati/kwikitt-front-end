@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { View, Text, TextInput, Button, TouchableOpacity, ImageBackground, StyleSheet, StatusBar, Image, ScrollView,Dimensions,TouchableHighlight } from 'react-native'
+import { View, Text, TextInput, Button, TouchableOpacity, ImageBackground, StyleSheet, StatusBar, Image, ScrollView,Dimensions,TouchableHighlight,ActivityIndicator } from 'react-native'
 import { Icon } from 'react-native-elements'
 import LinearGradient from 'react-native-linear-gradient'
 import AsyncStorage from '@react-native-community/async-storage';
@@ -19,6 +19,7 @@ export class Address extends Component {
             serviceImages:'',
             desc:'',
             servId:null,
+            isLoading:true
         }
     }
 
@@ -41,7 +42,8 @@ export class Address extends Component {
                 this.setState({
                     names:response.data.name,
                     serviceImages:response.data.serviceImage,
-                    desc:response.data.description
+                    desc:response.data.description,
+                    isLoading:false
                 })
             })
         } catch (e) {
@@ -72,8 +74,12 @@ export class Address extends Component {
       }
     render() {
         const { data } = this.state
-        const {serviceImages} = this.state
+        const {serviceImages,isLoading} = this.state
+                
         return (
+            (isLoading===true)?
+            <ActivityIndicator style={{flex:1}} animating={true} size="large" color="#0000ff" />
+            :
             <View style={{ flex: 1 }}>
                             <View>
                                 <TouchableOpacity

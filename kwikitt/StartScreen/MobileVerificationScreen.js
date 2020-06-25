@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet,TouchableOpacity,Platform,TextInput,StatusBar } from 'react-native'
+import { View, Text, StyleSheet,TouchableOpacity,Platform,TextInput,StatusBar,ActivityIndicator } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import * as Animatable from 'react-native-animatable'
 import axios from 'axios'
+import SpinnerButton from 'react-native-spinner-button';
 
 class  MobileVerificationScreen extends Component {
     constructor(props){
         super(props)
         {global.MyVar}
         this.state={
-            phone:''
+            phone:'',
+            isLoading:true,
+            defaultLoading:false
         }
     }
     
@@ -33,13 +36,15 @@ class  MobileVerificationScreen extends Component {
                 console.log(error)
               })
           } else {
-            alert('Please Enter Mobile number');
+            alert('Please Enter Valid Mobile number');
+            this.setState({defaultLoading:false})
           }
         } 
       
 
 
 render(){
+    const {isLoading} = this.state
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor='#009386'/>
@@ -68,21 +73,19 @@ render(){
 
                 </View>
                 <View>
-                    <TouchableOpacity style={{marginTop:20}} 
-                        onPress={()=>
-                            this.CheckTextInput()
-                        }
-                            
-                    >
-                    <LinearGradient
-                        onPress={()=>alert('button')}
-                        colors={['#08d4c4','#01ab9d']}
-                        style={styles.signIn}
-                    >
-                        <Text style={[styles.textSign,{color:'#fff'}]} >Sign In</Text>
-                    </LinearGradient>
-                   </TouchableOpacity>
+                    <SpinnerButton
+                                spinnerType="UIActivityIndicator"
+                                buttonStyle={styles.buttonStyle}
+                                isLoading={this.state.defaultLoading}
+                                onPress={() => {
+                                this.setState({ defaultLoading: true });
+                                this.CheckTextInput()
+                                }}
+                            >
+                                <Text style={styles.textSign}>SignIn</Text>
+                            </SpinnerButton>
                 </View>
+                
             </Animatable.View>
         </View>
     )
@@ -147,5 +150,14 @@ const styles = StyleSheet.create({
     textSign: {
         fontSize:18,
         fontWeight: 'bold',
-    }
+        color:'white'
+    },
+    buttonStyle: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 50,
+        backgroundColor: '#009387',
+        borderRadius:7,
+        marginTop:30
+      }
 })

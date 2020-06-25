@@ -5,14 +5,41 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import * as Animatable from 'react-native-animatable'
 import axios from 'axios'
+import SpinnerButton from 'react-native-spinner-button';
 
 class  OtpVerificationScreen extends Component {
     constructor(props){
         super(props)
         this.state={
-            otp:''
+            otp:'',
+            defaultLoading:false
         }
     }
+
+    CheckTextInput = (data) => {
+        if (this.state.otp.length >='4') {
+            axios.post(`${global.MyVar}/user/verify/otp/finish`,{
+                otp:this.state.otp,
+                phone:data
+              }).then(response=>{
+                  if(!response.data.data.isRegistered){
+                    this.props.navigation.navigate('RegistrationScreen',{
+                        data1:data,
+                    })
+                  }
+                  else{
+                    this.props.navigation.navigate('HomeScreen')
+                  }
+              }).catch(error=>{
+                console.warn(error)
+              })
+        } else {
+            this.setState({defaultLoading:false})
+            alert('Please Enter OTP');
+         
+        }
+      }
+    
 
 render(){
     const {data} =this.props.route.params
@@ -37,24 +64,8 @@ render(){
                                 />
                 </View>
                 <View>
-                    <TouchableOpacity style={{marginTop:20}}
-                        onPress={()=>{
-                            axios.post(`${global.MyVar}/user/verify/otp/finish`,{
-                              otp:this.state.otp,
-                              phone:data
-                            }).then(response=>{
-                                if(!response.data.data.isRegistered){
-                                  this.props.navigation.navigate('RegistrationScreen',{
-                                      data1:data,
-                                  })
-                                }
-                                else{
-                                  this.props.navigation.navigate('HomeScreen')
-                                }
-                            }).catch(error=>{
-                              console.warn(error)
-                            })
-                          }}
+                    {/* <TouchableOpacity style={{marginTop:20}}
+                        
                     >
 
                     <LinearGradient
@@ -64,7 +75,18 @@ render(){
                     >
                         <Text style={[styles.textSign,{color:'#fff'}]} >OTP Verify</Text>
                     </LinearGradient>
-                   </TouchableOpacity>
+                   </TouchableOpacity> */}
+                   <SpinnerButton
+                                spinnerType="UIActivityIndicator"
+                                buttonStyle={styles.buttonStyle}
+                                isLoading={this.state.defaultLoading}
+                                onPress={()=>{
+                                    this.CheckTextInput(data)
+                                    this.setState({ defaultLoading: true });
+                                  }}
+                            >
+                                <Text style={styles.textSign}>OTP Verify</Text>
+                            </SpinnerButton>
                 </View>
             </Animatable.View>
         </View>
@@ -129,5 +151,14 @@ const styles = StyleSheet.create({
     textSign: {
         fontSize:18,
         fontWeight: 'bold',
-    }
+        color:'white'
+    },
+    buttonStyle: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 50,
+        backgroundColor: '#009387',
+        borderRadius:7,
+        marginTop:30
+      }
 })

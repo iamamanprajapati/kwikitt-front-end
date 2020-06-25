@@ -5,6 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import * as Animatable from 'react-native-animatable'
 import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage';
+import SpinnerButton from 'react-native-spinner-button';
 
 class RegistrationScreen extends Component {
     constructor() {
@@ -18,6 +19,7 @@ class RegistrationScreen extends Component {
                 ''
             ],
             isSelected: false,
+            defaultLoading:false
         }
     }
 
@@ -57,12 +59,13 @@ class RegistrationScreen extends Component {
             })
           } else {
             alert('Please Enter Name');
+            this.setState({defaultLoading:false})
           }
         } else {
           alert('Please Enter Email');
+          this.setState({defaultLoading:false})
         }
       };
-
 
 
     chackBoxChange = (val) => {
@@ -133,7 +136,7 @@ class RegistrationScreen extends Component {
                         <Text style={styles.label}>Do you want to be make service provider?</Text>
                     </View>
                     <View>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                            onPress={()=>
                                 this.CheckTextInput(data1)
                             }
@@ -144,7 +147,18 @@ class RegistrationScreen extends Component {
                             >
                                 <Text style={[styles.textSign, { color: '#fff' }]}>Sign In</Text>
                             </LinearGradient>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
+                        <SpinnerButton
+                                spinnerType="UIActivityIndicator"
+                                buttonStyle={styles.buttonStyle}
+                                isLoading={this.state.defaultLoading}
+                                onPress={() => {
+                                this.setState({ defaultLoading: true });
+                                this.CheckTextInput(data1)
+                                }}
+                            >
+                                <Text style={styles.textSign}>SignIn</Text>
+                            </SpinnerButton>
 
                     </View>
                 </Animatable.View>
@@ -212,6 +226,7 @@ const styles = StyleSheet.create({
     textSign: {
         fontSize: 18,
         fontWeight: 'bold',
+        color:'white'
     },
     checkbox: {
         alignSelf: "center",
@@ -219,4 +234,12 @@ const styles = StyleSheet.create({
     label: {
         margin: 8,
     },
+    buttonStyle: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 50,
+        backgroundColor: '#009387',
+        borderRadius:7,
+        marginTop:30
+      }
 })
