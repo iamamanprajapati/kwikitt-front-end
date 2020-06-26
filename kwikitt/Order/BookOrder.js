@@ -34,7 +34,7 @@ export class BookOrder extends Component {
                                 colors={['#08d4c4', '#01ab9d']}
                                 style={styles.signIn}
                             >
-                                <Text style={[styles.textSign, { color: '#fff' }]}>Go To Home</Text>
+                                <Text style={[styles.textSign, { color: '#fff' }]}>Go To Bookings</Text>
                             </LinearGradient>
                         </TouchableOpacity>
           </View>

@@ -12,6 +12,12 @@ import AsyncStorage from '@react-native-community/async-storage';
 const Width = Dimensions.get('window').width;
 const W1=(Width/2)-5
 
+function wait(timeout) {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout);
+  });
+}
+
 export class CategoryScreen extends Component {
   constructor() {
     super()
@@ -19,7 +25,7 @@ export class CategoryScreen extends Component {
     this.state = {
       data: [],
       userId:'',
-      isLoading:true
+      isLoading:true,
     }
   }
 
@@ -44,7 +50,7 @@ export class CategoryScreen extends Component {
     this._unsubscribe();
   }
 
-
+  
   handleBackButton = () => {
     Alert.alert(
         'Exit App',
@@ -86,7 +92,8 @@ export class CategoryScreen extends Component {
       (isLoading===true)?
       <ActivityIndicator style={{flex:1}} animating={true} size="large" color="#0000ff" />
       :
-      <View style={{ flex: 1, backgroundColor: 'rgb(241, 243, 246)' }}>
+      <View
+      style={{ flex: 1, backgroundColor: 'rgb(241, 243, 246)' }}>
         <StatusBar
           barStyle="dark-content"
           hidden={false}
@@ -97,7 +104,9 @@ export class CategoryScreen extends Component {
         <Header />
         <ScrollView>
           <Banner />
-          <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around', padding: 3 }}>
+          <View
+          
+          style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around', padding: 3 }}>
             {
               data.map(list => (
                 <TouchableHighlight onPress={() =>{

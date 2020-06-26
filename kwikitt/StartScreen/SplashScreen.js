@@ -9,12 +9,13 @@ import axios from 'axios'
 class SplashScreen extends Component {
     constructor(){
         super()
-        global.MyVar='http://1f57a13ad52b.ngrok.io'
+        global.MyVar='http://147.139.33.186'
         this.state={
             userId:null,
         }
     }
 
+    
     getData = async () => {
         try {
             const value = await AsyncStorage.getItem('token')

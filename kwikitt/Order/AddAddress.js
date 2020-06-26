@@ -3,17 +3,19 @@ import { View, Text, StyleSheet, TouchableOpacity, Platform, TextInput, StatusBa
 import LinearGradient from 'react-native-linear-gradient'
 import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage';
+import SpinnerButton from 'react-native-spinner-button';
+
 
 class AddAddress extends Component {
     constructor() {
         super()
-        {global.MyVar}
+        { global.MyVar }
         this.state = {
             city: 'Shahjahanpur',
             street: '',
             pinCode: '242001',
             state: 'Uttar Pradesh',
-            userId:null
+            userId: null
         }
     }
 
@@ -27,8 +29,27 @@ class AddAddress extends Component {
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getData()
+    }
+
+    CheckTextInput = () => {
+        if (this.state.street.length >= '2') {
+            axios.post(`${global.MyVar}/api/address/add-or-update`, {
+                city: this.state.city,
+                street: this.state.street,
+                pinCode: this.state.pinCode,
+                state: this.state.state,
+                userId: this.state.userId
+            }).then(response => {
+                this.props.navigation.navigate('Address')
+            }).catch(error => {
+                console.log(error)
+            })
+        } else {
+            this.setState({ defaultLoading: false })
+            alert('Please Enter Address');
+        }
     }
 
     render() {
@@ -84,31 +105,20 @@ class AddAddress extends Component {
                             value={this.state.state}
                         />
                     </View>
-                   
 
-                    <View>
-                        <TouchableOpacity
+
+                    <View >
+                        <SpinnerButton
+                            spinnerType="UIActivityIndicator"
+                            buttonStyle={styles.buttonStyle}
+                            isLoading={this.state.defaultLoading}
                             onPress={() => {
-                                axios.post(`${global.MyVar}/api/address/add-or-update`, {
-                                    city: this.state.city,
-                                    street: this.state.street,
-                                    pinCode: this.state.pinCode,
-                                    state: this.state.state,
-                                    userId: this.state.userId
-                                }).then(response => {
-                                    this.props.navigation.navigate('Address')
-                                }).catch(error => {
-                                    console.log(error)
-                                })
+                                this.setState({ defaultLoading: true });
+                                this.CheckTextInput()
                             }}
                         >
-                            <LinearGradient
-                                colors={['#08d4c4', '#01ab9d']}
-                                style={styles.signIn}
-                            >
-                                <Text style={[styles.textSign, { color: '#fff' }]}>Add</Text>
-                            </LinearGradient>
-                        </TouchableOpacity>
+                            <Text style={styles.textSign}>Add Address</Text>
+                        </SpinnerButton>
 
                     </View>
                 </View>
@@ -173,6 +183,7 @@ const styles = StyleSheet.create({
     textSign: {
         fontSize: 18,
         fontWeight: 'bold',
+        color: 'white'
     },
     checkbox: {
         alignSelf: "center",
@@ -180,4 +191,12 @@ const styles = StyleSheet.create({
     label: {
         margin: 8,
     },
+    buttonStyle: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 50,
+        backgroundColor: '#009387',
+        borderRadius: 10,
+        marginTop: 30
+    }
 })

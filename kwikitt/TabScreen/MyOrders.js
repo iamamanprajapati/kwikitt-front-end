@@ -58,6 +58,7 @@ export class MyOrders extends Component {
             :
             <View style={{flex:1}}>
                 <Header/>
+                <View style={{flex:1}}>
             <ScrollView style={{flex:1}}>
             {
                 data.map(list=>(
@@ -83,6 +84,7 @@ export class MyOrders extends Component {
                 ))
             }
       </ScrollView>
+      </View>
       </View>
         )
     }
