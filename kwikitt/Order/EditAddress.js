@@ -110,7 +110,7 @@ class EditAddress extends Component {
                                 colors={['#08d4c4', '#01ab9d']}
                                 style={styles.signIn}
                             >
-                                <Text style={[styles.textSign, { color: '#fff' }]}>Add</Text>
+                                <Text style={[styles.textSign, { color: '#fff' }]}>Edit Address</Text>
                             </LinearGradient>
                         </TouchableOpacity>
 

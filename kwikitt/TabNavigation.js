@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import {ActivityIndicator} from 'react-native'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import FontAwesome from 'react-native-vector-icons/FontAwesome5'
 import { PartnerScreen } from './TabScreen/PartnerScreen'
 import { ProfileScreen } from "./TabScreen/ProfileScreen";
 import { MyOrders } from "./TabScreen/MyOrders";
+import {CategoryScreen} from './Category'
 import { Home } from "./Home";
 
 const Tab = createMaterialBottomTabNavigator();
@@ -40,7 +40,7 @@ export class TabNavigation extends Component {
                         tabBarLabel: 'Partner',
                         tabBarColor: '#009387',
                         tabBarIcon: ({ color }) => (
-                            <FontAwesome name="handshake-o" color={color} size={26} />
+                            <FontAwesome name="handshake" color={color} size={26} />
                         ),
                     }}
                 />
@@ -49,7 +49,7 @@ export class TabNavigation extends Component {
                     name="MyOrders"
                     component={MyOrders}
                     options={{
-                        tabBarLabel: 'Orders',
+                        tabBarLabel: 'Bookings',
                         tabBarColor: '#009387',
                         tabBarIcon: ({ color }) => (
                             <MaterialCommunityIcons name="cart-outline" color={color} size={26} />

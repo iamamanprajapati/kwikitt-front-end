@@ -84,9 +84,7 @@ class AddAddress extends Component {
                             value={this.state.state}
                         />
                     </View>
-                    <View>
-                        <Text>{this.state.userId}</Text>
-                    </View>
+                   
 
                     <View>
                         <TouchableOpacity

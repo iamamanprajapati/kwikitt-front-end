@@ -136,18 +136,6 @@ class RegistrationScreen extends Component {
                         <Text style={styles.label}>Do you want to be make service provider?</Text>
                     </View>
                     <View>
-                        {/* <TouchableOpacity
-                           onPress={()=>
-                                this.CheckTextInput(data1)
-                            }
-                        >
-                            <LinearGradient
-                                colors={['#08d4c4', '#01ab9d']}
-                                style={styles.signIn}
-                            >
-                                <Text style={[styles.textSign, { color: '#fff' }]}>Sign In</Text>
-                            </LinearGradient>
-                        </TouchableOpacity> */}
                         <SpinnerButton
                                 spinnerType="UIActivityIndicator"
                                 buttonStyle={styles.buttonStyle}

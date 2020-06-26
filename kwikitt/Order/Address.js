@@ -112,51 +112,43 @@ export class Address extends Component {
                                         pinCode:j.pinCode
                                     })}
                             >
-                                <ImageBackground style={{ marginTop: 5, marginLeft: 5, marginRight: 5, padding: 5, backgroundColor: 'white', borderWidth: 4, borderColor: 'white', marginTop: 4, elevation: 4, height: 170 }}>
+                                <ImageBackground style={{ marginTop: 5, marginLeft: 5, marginRight: 5, padding: 5, backgroundColor: 'white', borderWidth: 4, borderColor: 'white', marginTop: 4, elevation: 4, height: 150 }}>
                                     <View style={{ flex: 1, flexDirection: 'row' }}>
                                         <View style={{ flex: 1, flexDirection: 'column' }}>
+                                        <Text >{j.street},</Text>
                                             <Text>{j.city},</Text>
                                             <Text>{j.pinCode},</Text>
-                                            <Text >{j.street},</Text>
                                             <Text>{j.state},</Text>
-                                           
                                         </View>
                                         <View style={{ flex: .25, justifyContent: 'center', alignItems: 'center' }}>
-                                            <View style={{ flex: .33 }}>
-                                                <TouchableHighlight style={{ borderRadius: 5, height: 40, width: 40 }}
-                                                    onPress={() => {
-                                                        this.props.navigation.navigate('EditAddress', {
-                                                            id1: j.id, street1: j.street
-                                                        })
-                                                    }}
-                                                >
+                                            <View style={{ flex: .5, }}>
                                                     <Icon
                                                         size={20}
                                                         reverse
                                                         name='edit'
                                                         type='font-awesome'
                                                         color='green'
-                                                    />
-                                                </TouchableHighlight>
-                                            </View>
-                                          
-                                            <View style={{ flex: .33 }}>
-                                                <TouchableHighlight style={{ borderRadius: 5, height: 40, width: 40 }}
-                                                    onPress={() => {
-                                                        axios.delete(`${global.MyVar}/api/address/delete/${j.id}`)
-                                                            .then(response => {
-                                                                this.componentDidMount();
+                                                        onPress={() => {
+                                                            this.props.navigation.navigate('EditAddress', {
+                                                                id1: j.id, street1: j.street
                                                             })
-                                                    }}
-                                                >
+                                                        }}
+                                                    />
+                                            </View>
+                                            <View style={{ flex: .5 }}>
                                                     <Icon
                                                         size={20}
                                                         reverse
                                                         name='delete'
                                                         type='AntDesign'
                                                         color='red'
+                                                        onPress={() => {
+                                                            axios.delete(`${global.MyVar}/api/address/delete/${j.id}`)
+                                                                .then(response => {
+                                                                    this.componentDidMount();
+                                                                })
+                                                        }}
                                                     />
-                                                </TouchableHighlight>
                                             </View>
                                         </View>
                                     </View>

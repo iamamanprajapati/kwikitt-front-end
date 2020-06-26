@@ -28,7 +28,7 @@ export class BookOrder extends Component {
             <Text style={styles.welcome}>Order Booked</Text>
             <TouchableOpacity
                     style={{alignItems:'center'}}
-                    onPress={()=>this.props.navigation.navigate('Category')}
+                    onPress={()=>this.props.navigation.navigate('MyOrders')}
                >
                             <LinearGradient
                                 colors={['#08d4c4', '#01ab9d']}

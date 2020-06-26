@@ -9,10 +9,9 @@ import axios from 'axios'
 class SplashScreen extends Component {
     constructor(){
         super()
-        global.MyVar='http://120931a3a65f.ngrok.io'
+        global.MyVar='http://1f57a13ad52b.ngrok.io'
         this.state={
             userId:null,
-            
         }
     }
 
@@ -64,7 +63,7 @@ class SplashScreen extends Component {
                 <Animatable.Image
                         animation="bounceIn"
                         duration={1500}
-                    source={require('../logo.png')}
+                    source={require('../assets/logo.png')}
                     style={styles.logo}
                     resizeMode="stretch"
                 />

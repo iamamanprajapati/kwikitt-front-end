@@ -25,7 +25,7 @@ class ViewServices extends Component {
     render() {
         const {list}=this.props.route.params;
         return (
-            <View style={{flex:1}}>
+            <View  style={{flex:1}}>
                 <Header/>
                 <ScrollView style={{flex:1}}>
                 {
@@ -35,14 +35,13 @@ class ViewServices extends Component {
                        }}
                        >
                         <ImageBackground style={{marginTop:5,marginLeft:5,marginRight:5,padding:5,backgroundColor:'white',borderWidth:4,borderColor:'white',marginTop:4,elevation:10,height:Height1}}>
-                        <View key={j.id}  style={{flex:1,flexDirection:'row'}}>
-                            <View style={{flex:1.8}}>
-                                <View style={{flex:2}}>
+                        <View key={j.name}  style={{flex:1,flexDirection:'row'}}>
+                            <View key={j.name} style={{flex:1.8}}>
+                                <View key={j.name} style={{flex:2}}>
                                 <Text style={{fontSize:20,marginLeft:10,fontWeight:'bold'}} >{j.name}</Text>
                                 </View>
-                                
                             </View>
-                            <View style={{flex:1,justifyContent:'center'}}>
+                            <View key={j.id} style={{flex:1,justifyContent:'center'}}>
                             <Image style={{height:100,width:100}} source={{uri:`${global.MyVar}/uploads/services/${j.serviceImage}`}}/>
                             </View>
                         </View>

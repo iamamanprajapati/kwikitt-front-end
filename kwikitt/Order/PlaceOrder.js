@@ -3,6 +3,8 @@ import {View,Text,Image,Button,StyleSheet,TouchableOpacity,TextInput,ImageBackgr
 import axios from 'axios'
 import LinearGradient from 'react-native-linear-gradient'
 import AsyncStorage from '@react-native-community/async-storage';
+import SpinnerButton from 'react-native-spinner-button';
+
 
  class PlaceOrder extends Component {
         constructor(){
@@ -14,7 +16,8 @@ import AsyncStorage from '@react-native-community/async-storage';
                 desc:'',
                 bookingTime:'',
                 servId:null,
-                userId:null
+                userId:null,
+                defaultLoading:false
             }
         }
 
@@ -38,6 +41,25 @@ import AsyncStorage from '@react-native-community/async-storage';
         }
     }
 
+    CheckTextInput = (addId) => {
+        if (this.state.bookingTime.length >='2') {
+            axios.post(`${global.MyVar}/booking/place`,{
+                addressId:addId,
+                bookingRemarks:this.state.bookingTime,
+                customerId:this.state.userId,
+                paymentMethod:'COD',
+                serviceId:this.state.servId
+            }).then(response => {
+                this.props.navigation.navigate('bookOrder')
+            }).catch(error => {
+                console.log(error)
+            })
+        } else {
+          alert('Please Provide Service Timing ');
+          this.setState({defaultLoading:false})
+        }
+      } 
+
     componentDidMount(){
         this.getData()
     }
@@ -58,30 +80,19 @@ import AsyncStorage from '@react-native-community/async-storage';
                                 this.setState({ bookingTime: text })
                             }}
                         />
-                <TouchableOpacity
-                    style={{alignItems:'center'}}
-                    onPress={()=>{
-                        axios.post(`${global.MyVar}/booking/place`,{
-                            addressId:addId,
-                            bookingRemarks:this.state.bookingTime,
-                            customerId:this.state.userId,
-                            paymentMethod:'COD',
-                            serviceId:this.state.servId
-                        }).then(response => {
-                            this.props.navigation.navigate('bookOrder')
-                        }).catch(error => {
-                            console.log(error)
-                        })
-                    }}
-               >
-                            <LinearGradient
-                                colors={['#08d4c4', '#01ab9d']}
-                                style={styles.signIn}
+                
+                          
+                        <SpinnerButton
+                                spinnerType="UIActivityIndicator"
+                                buttonStyle={styles.buttonStyle}
+                                isLoading={this.state.defaultLoading}
+                                onPress={() => {
+                                this.setState({ defaultLoading: true });
+                                this.CheckTextInput(addId)
+                                }}
                             >
-                                <Text style={[styles.textSign, { color: '#fff' }]}>Place Order</Text>
-                            </LinearGradient>
-                        </TouchableOpacity>
-
+                                <Text style={styles.textSign}>Place Order</Text>
+                            </SpinnerButton>
                         <ImageBackground style={{ marginTop: 25, marginLeft: 5, marginRight: 5, padding: 5, backgroundColor: 'white', borderWidth: 4, borderColor: 'white', elevation: 4, height: 150 }}>
                                     <View style={{ flex: 1, flexDirection: 'row' }}>
                                         <View style={{ flex: 1, flexDirection: 'column' }}>
@@ -112,7 +123,8 @@ const styles = StyleSheet.create({
     },
     textSign: {
         fontSize: 18,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color:'white'
     },
     textInput: {
         color: '#05375a',
@@ -121,4 +133,15 @@ const styles = StyleSheet.create({
         borderWidth:1,
 
     },
+    buttonStyle: {
+        justifyContent: 'center',
+        height: 50,
+        backgroundColor: '#009387',
+        borderRadius:7,
+        width: 200,
+        alignItems: 'center',
+        borderRadius: 10,
+        marginTop: 30,
+        alignSelf:'center'
+      }
 })

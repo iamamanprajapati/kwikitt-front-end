@@ -51,8 +51,7 @@ export class ProfileScreen extends Component {
             <ActivityIndicator style={{flex:1}} size="large" color="#009386" />
             :
             <View style={{flex:1,backgroundColor:'#009386',alignItems:'center'}}>
-               
-                 <Image style={{ width: 120, height: 120,  elevation: 4,marginTop:60 }} source={require('../profile.png')} />
+                 <Image style={{ width: 120, height: 120,marginTop:60 }} source={require('../profile.png')} />
                  <Text style={{marginTop:20,marginLeft:10,fontWeight:'bold',fontSize:25,color:'white'}}>{this.state.name}</Text>
                  <Text style={{marginTop:10,marginLeft:10,fontWeight:'200',color:'white'}}> {this.state.email}</Text>
                 <Text style={{marginTop:10,marginLeft:10,fontWeight:'200',color:'white'}}>{this.state.mobile}</Text>
