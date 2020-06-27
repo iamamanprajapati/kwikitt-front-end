@@ -48,7 +48,7 @@ class SplashScreen extends Component {
     }
 
     openURL=()=>{
-        Linking.openURL("market://details?id=com.spotify.music")
+        Linking.openURL("market://details?id=in.kwikitt")
     }
 
     componentDidMount(){
