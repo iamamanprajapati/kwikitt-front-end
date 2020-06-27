@@ -61,3 +61,5 @@ export class ProfileScreen extends Component {
 }
 
 export default ProfileScreen
+
+console.disableYellowBox = true;

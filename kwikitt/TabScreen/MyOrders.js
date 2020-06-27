@@ -91,3 +91,5 @@ export class MyOrders extends Component {
 }
 
 export default MyOrders
+
+console.disableYellowBox = true;

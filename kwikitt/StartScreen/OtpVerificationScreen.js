@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet,TouchableOpacity,Platform,TextInput,StatusBar } from 'react-native'
-import LinearGradient from 'react-native-linear-gradient'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import * as Animatable from 'react-native-animatable'
 import axios from 'axios'
 import SpinnerButton from 'react-native-spinner-button';
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 class  OtpVerificationScreen extends Component {
     constructor(props){
@@ -13,6 +13,14 @@ class  OtpVerificationScreen extends Component {
         this.state={
             otp:'',
             defaultLoading:false
+        }
+    }
+
+    onSubmit = async (value) => {
+        try {
+            await AsyncStorage.setItem('token', JSON.stringify(value))
+        } catch (e) {
+            console.warn(e)
         }
     }
 
@@ -28,6 +36,7 @@ class  OtpVerificationScreen extends Component {
                     })
                   }
                   else{
+                    this.onSubmit(response.data.data.id)
                     this.props.navigation.navigate('HomeScreen')
                   }
               }).catch(error=>{
@@ -64,18 +73,6 @@ render(){
                                 />
                 </View>
                 <View>
-                    {/* <TouchableOpacity style={{marginTop:20}}
-                        
-                    >
-
-                    <LinearGradient
-                        onPress={()=>alert('button')}
-                        colors={['#08d4c4','#01ab9d']}
-                        style={styles.signIn}
-                    >
-                        <Text style={[styles.textSign,{color:'#fff'}]} >OTP Verify</Text>
-                    </LinearGradient>
-                   </TouchableOpacity> */}
                    <SpinnerButton
                                 spinnerType="UIActivityIndicator"
                                 buttonStyle={styles.buttonStyle}

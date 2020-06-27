@@ -146,3 +146,5 @@ export default class Category extends Component {
     );
   }
 }
+
+console.disableYellowBox = true;

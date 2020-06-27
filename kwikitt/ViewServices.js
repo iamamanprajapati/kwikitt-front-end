@@ -56,3 +56,4 @@ class ViewServices extends Component {
 }
 
 export default ViewServices
+console.disableYellowBox = true;
