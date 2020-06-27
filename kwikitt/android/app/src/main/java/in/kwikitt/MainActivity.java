@@ -1,4 +1,4 @@
-package com.kwikitt;
+package in.kwikitt;
 
 import com.facebook.react.ReactActivity;
 
