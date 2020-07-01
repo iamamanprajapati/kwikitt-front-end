@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "26720236642",
+    "firebase_url": "https://kwikitt-bf845.firebaseio.com",
+    "project_id": "kwikitt-bf845",
+    "storage_bucket": "kwikitt-bf845.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:26720236642:android:4ea4919e1f9e49b6d58d3b",
+        "android_client_info": {
+          "package_name": "in.kwikitt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "26720236642-j77ae7lp27js03ludalv3e636ov7bps0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBMPiW3uJOC23Q5cwcDBoju78TvrkTVcM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "26720236642-j77ae7lp27js03ludalv3e636ov7bps0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

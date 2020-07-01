@@ -83,35 +83,30 @@ export class Address extends Component {
                 <View style={{ flex: 1 }}>
                     <View>
                         <TouchableOpacity
+                            style={{ alignItems: 'center', marginBottom: 5 }}
                             onPress={() => this.props.navigation.navigate('AddAddress', { id: this.state.userId })}
                         >
                             <LinearGradient
-                                colors={['#08d4c4', '#01ab9d']}
+                               colors={['#08d4c4', '#01ab9d']}
                                 style={styles.signIn}
                             >
                                 <Text style={[styles.textSign, { color: '#fff' }]}>+ Add New Address</Text>
                             </LinearGradient>
                         </TouchableOpacity>
                     </View>
+                    <ScrollView>
                     <View style={{ flex: 1 }}>
                         <View style={{ width: Width }}>
                             <Image style={{ width: 120, height: 120, alignSelf: 'center', elevation: 4 }} source={{ uri: `${global.MyVar}/uploads/services/${serviceImages}` }} />
                             <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 20 }}>{this.state.names}</Text>
-                            <Text style={{ marginTop: '5%', marginLeft: '5%', fontSize: 12 }}><Text style={{ fontWeight: 'bold', fontSize: 15 }}>Description:</Text> {this.state.desc} </Text>
+                            <Text style={{ marginTop: '5%', marginLeft: '5%', fontSize: 12,paddingBottom:10 }}><Text style={{ fontWeight: 'bold', fontSize: 15 }}>Description:</Text> {this.state.desc} </Text>
                         </View>
                     </View>
-                    <ScrollView style={{ flex: 1 }}>
+                    
+                    <View style={{ flex: 1 }}>
                         {
                             data.map(j => (
-                                <TouchableHighlight
-                                    onPress={() => this.props.navigation.navigate('placeOrder', {
-                                        addId: j.id,
-                                        street: j.street,
-                                        city: j.city,
-                                        state: j.state,
-                                        pinCode: j.pinCode
-                                    })}
-                                >
+                                <TouchableHighlight>
                                     <ImageBackground style={{ marginTop: 5, marginLeft: 5, marginRight: 5, padding: 5, backgroundColor: 'white', borderWidth: 4, borderColor: 'white', marginTop: 4, height: 150 }}>
                                         <View style={{ flex: 1, flexDirection: 'row' }}>
                                             <View style={{ flex: 1, flexDirection: 'column' }}>
@@ -119,6 +114,23 @@ export class Address extends Component {
                                                 <Text>{j.city},</Text>
                                                 <Text>{j.pinCode},</Text>
                                                 <Text>{j.state},</Text>
+                                                <TouchableOpacity
+                                                    style={{ width: '40%', height: 40, marginTop: 5, borderRadius: 7 }}
+                                                    onPress={() => this.props.navigation.navigate('placeOrder', {
+                                                        addId: j.id,
+                                                        street: j.street,
+                                                        city: j.city,
+                                                        state: j.state,
+                                                        pinCode: j.pinCode
+                                                    })}
+                                                >
+                                                    <LinearGradient
+                                                        colors={['#08d4c4', '#01ab9d']}
+                                                        style={styles.signIn1}
+                                                    >
+                                                        <Text style={[styles.textSign1, { color: '#fff' }]}>Select</Text>
+                                                    </LinearGradient>
+                                                </TouchableOpacity>
                                             </View>
                                             <View style={{ flex: .25, justifyContent: 'center', alignItems: 'center' }}>
                                                 <View style={{ flex: .5, }}>
@@ -156,6 +168,7 @@ export class Address extends Component {
                                 </TouchableHighlight>
                             ))
                         }
+                    </View>
                     </ScrollView>
                 </View>
         )
@@ -167,13 +180,26 @@ export default Address
 const styles = StyleSheet.create({
     signIn: {
         width: '100%',
-        height: 60,
+        height: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 5
+        marginTop: 5,
+        borderRadius: 7
     },
     textSign: {
         fontSize: 18,
         fontWeight: 'bold',
     },
+    signIn1: {
+        width: '100%',
+        height: 32,
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        borderRadius: 7
+    },
+    textSign1: {
+        fontSize: 13,
+        fontWeight: 'bold',
+    }
 })

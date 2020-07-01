@@ -5,11 +5,13 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import * as Animatable from 'react-native-animatable'
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios'
+import { color } from 'react-native-reanimated'
 
 class SplashScreen extends Component {
     constructor(){
         super()
-        global.MyVar='http://147.139.33.186'
+        console.warn('run')
+        global.MyVar='http://d7a83cf50e6b.ngrok.io'
         this.state={
             userId:null,
         }
@@ -93,7 +95,7 @@ class SplashScreen extends Component {
             </Animatable.View>
         </View>
         :
-        <View style={{backgroundColor:'#009387'}}>
+        <View style={{backgroundColor:`${color}`}}>
             
         </View>
     )

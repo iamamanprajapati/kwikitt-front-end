@@ -62,7 +62,7 @@ export class MyOrders extends Component {
             <ScrollView style={{flex:1}}>
             {
                 data.map(list=>(
-                    <View key={list.id} style={{flex:1}}>
+                    <View key={list.id} style={{flex:1,flexDirection:'column-reverse'}}>
                         <TouchableOpacity>
                         <ImageBackground style={{marginTop:5,marginLeft:5,marginRight:5,padding:5,backgroundColor:'white',borderWidth:4,borderColor:'white',marginTop:4,elevation:4,height:150}}>
                         <View style={{flex:1,flexDirection:'column'}}>

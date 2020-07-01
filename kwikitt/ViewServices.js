@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ImageBackground, Dimensions, TouchableHighlight } from 'react-native'
+import { View, Text, StyleSheet, Image,TouchableNativeFeedback, TouchableOpacity, ScrollView, ImageBackground, Dimensions, TouchableHighlight } from 'react-native'
 import Header from './Header'
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -33,6 +33,7 @@ class ViewServices extends Component {
                             <TouchableHighlight onPress={() => {
                                 this.onSubmit(j.id)
                             }}
+                            background={TouchableNativeFeedback.Ripple('#fff', true)}
                             >
                                 <ImageBackground style={{ marginTop: 5, marginLeft: 5, marginRight: 5, padding: 5, backgroundColor: 'white', borderWidth: 4, borderColor: 'white', marginTop: 4, elevation: 10, height: Height1 }}>
                                     <View key={j.name} style={{ flex: 1, flexDirection: 'row' }}>
