@@ -132,7 +132,7 @@ export class CategoryScreen extends Component {
               style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around', padding: 3 }}>
               {
                 data.map(list => (
-                  <ImageBackground style={{ width: W1, height: 200, justifyContent: 'center', backgroundColor: 'white', elevation: 4}}>
+                  <ImageBackground style={{ width: W1, height: 200, justifyContent: 'center', backgroundColor: 'white', elevation: 4,marginTop:1}}>
                   <TouchableNativeFeedback
                   background={TouchableNativeFeedback.Ripple('#bfbfbf')}
                    onPress={() =>
@@ -140,7 +140,7 @@ export class CategoryScreen extends Component {
                   }
                   >
                       <View key={list.id}>
-                        <Image style={{ width: 150, height: 159, alignSelf: 'center', elevation: 4 }} source={{ uri: `${global.MyVar}/uploads/categories/${list.categoryImage}` }} />
+                        <Image style={{ width: 150, height: 160, alignSelf: 'center', elevation: 4 }} source={{ uri: `${global.MyVar}/uploads/categories/${list.categoryImage}` }} />
                         <Text key={list.id} style={{ fontSize: 13, marginBottom: 20, textAlign: 'center' }}>{list.name}</Text>
                       </View>
                   </TouchableNativeFeedback>
