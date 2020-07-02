@@ -87,7 +87,7 @@ export class Address extends Component {
                             onPress={() => this.props.navigation.navigate('AddAddress', { id: this.state.userId })}
                         >
                             <LinearGradient
-                               colors={['#08d4c4', '#01ab9d']}
+                                colors={['#08d4c4', '#01ab9d']}
                                 style={styles.signIn}
                             >
                                 <Text style={[styles.textSign, { color: '#fff' }]}>+ Add New Address</Text>
@@ -95,80 +95,80 @@ export class Address extends Component {
                         </TouchableOpacity>
                     </View>
                     <ScrollView>
-                    <View style={{ flex: 1 }}>
-                        <View style={{ width: Width }}>
-                            <Image style={{ width: 120, height: 120, alignSelf: 'center', elevation: 4 }} source={{ uri: `${global.MyVar}/uploads/services/${serviceImages}` }} />
-                            <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 20 }}>{this.state.names}</Text>
-                            <Text style={{ marginTop: '5%', marginLeft: '5%', fontSize: 12,paddingBottom:10 }}><Text style={{ fontWeight: 'bold', fontSize: 15 }}>Description:</Text> {this.state.desc} </Text>
+                        <View style={{ flex: 1 }}>
+                            <View style={{ width: Width }}>
+                                <Image style={{ width: 120, height: 120, alignSelf: 'center', elevation: 4 }} source={{ uri: `${global.MyVar}/uploads/services/${serviceImages}` }} />
+                                <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 20 }}>{this.state.names}</Text>
+                                <Text style={{ marginTop: '5%', marginLeft: '5%', fontSize: 12, paddingBottom: 10 }}><Text style={{ fontWeight: 'bold', fontSize: 15 }}>Description:</Text> {this.state.desc} </Text>
+                            </View>
                         </View>
-                    </View>
-                    
-                    <View style={{ flex: 1 }}>
-                        {
-                            data.map(j => (
-                                <TouchableHighlight>
-                                    <ImageBackground style={{ marginTop: 5, marginLeft: 5, marginRight: 5, padding: 5, backgroundColor: 'white', borderWidth: 4, borderColor: 'white', marginTop: 4, height: 150 }}>
-                                        <View style={{ flex: 1, flexDirection: 'row' }}>
-                                            <View style={{ flex: 1, flexDirection: 'column' }}>
-                                                <Text >{j.street},</Text>
-                                                <Text>{j.city},</Text>
-                                                <Text>{j.pinCode},</Text>
-                                                <Text>{j.state},</Text>
-                                                <TouchableOpacity
-                                                    style={{ width: '40%', height: 40, marginTop: 5, borderRadius: 7 }}
-                                                    onPress={() => this.props.navigation.navigate('placeOrder', {
-                                                        addId: j.id,
-                                                        street: j.street,
-                                                        city: j.city,
-                                                        state: j.state,
-                                                        pinCode: j.pinCode
-                                                    })}
-                                                >
-                                                    <LinearGradient
-                                                        colors={['#08d4c4', '#01ab9d']}
-                                                        style={styles.signIn1}
+
+                        <View style={{ flex: 1 }}>
+                            {
+                                data.map(j => (
+                                    <TouchableHighlight>
+                                        <ImageBackground style={{ marginTop: 5, marginLeft: 5, marginRight: 5, padding: 5, backgroundColor: 'white', borderWidth: 4, borderColor: 'white', marginTop: 4, height: 150 }}>
+                                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                                                <View style={{ flex: 1, flexDirection: 'column' }}>
+                                                    <Text >{j.street},</Text>
+                                                    <Text>{j.city},</Text>
+                                                    <Text>{j.pinCode},</Text>
+                                                    <Text>{j.state},</Text>
+                                                    <TouchableOpacity
+                                                        style={{ width: '40%', height: 40, marginTop: 5, borderRadius: 7 }}
+                                                        onPress={() => this.props.navigation.navigate('placeOrder', {
+                                                            addId: j.id,
+                                                            street: j.street,
+                                                            city: j.city,
+                                                            state: j.state,
+                                                            pinCode: j.pinCode
+                                                        })}
                                                     >
-                                                        <Text style={[styles.textSign1, { color: '#fff' }]}>Select</Text>
-                                                    </LinearGradient>
-                                                </TouchableOpacity>
-                                            </View>
-                                            <View style={{ flex: .25, justifyContent: 'center', alignItems: 'center' }}>
-                                                <View style={{ flex: .5, }}>
-                                                    <Icon
-                                                        size={20}
-                                                        reverse
-                                                        name='edit'
-                                                        type='font-awesome'
-                                                        color='green'
-                                                        onPress={() => {
-                                                            this.props.navigation.navigate('EditAddress', {
-                                                                id1: j.id, street1: j.street
-                                                            })
-                                                        }}
-                                                    />
+                                                        <LinearGradient
+                                                            colors={['#08d4c4', '#01ab9d']}
+                                                            style={styles.signIn1}
+                                                        >
+                                                            <Text style={[styles.textSign1, { color: '#fff' }]}>Select</Text>
+                                                        </LinearGradient>
+                                                    </TouchableOpacity>
                                                 </View>
-                                                <View style={{ flex: .5 }}>
-                                                    <Icon
-                                                        size={20}
-                                                        reverse
-                                                        name='delete'
-                                                        type='AntDesign'
-                                                        color='red'
-                                                        onPress={() => {
-                                                            axios.delete(`${global.MyVar}/api/address/delete/${j.id}`)
-                                                                .then(response => {
-                                                                    this.componentDidMount();
+                                                <View style={{ flex: .25, justifyContent: 'center', alignItems: 'center' }}>
+                                                    <View style={{ flex: .5, }}>
+                                                        <Icon
+                                                            size={20}
+                                                            reverse
+                                                            name='edit'
+                                                            type='font-awesome'
+                                                            color='green'
+                                                            onPress={() => {
+                                                                this.props.navigation.navigate('EditAddress', {
+                                                                    id1: j.id, street1: j.street
                                                                 })
-                                                        }}
-                                                    />
+                                                            }}
+                                                        />
+                                                    </View>
+                                                    <View style={{ flex: .5 }}>
+                                                        <Icon
+                                                            size={20}
+                                                            reverse
+                                                            name='delete'
+                                                            type='AntDesign'
+                                                            color='red'
+                                                            onPress={() => {
+                                                                axios.delete(`${global.MyVar}/api/address/delete/${j.id}`)
+                                                                    .then(response => {
+                                                                        this.componentDidMount();
+                                                                    })
+                                                            }}
+                                                        />
+                                                    </View>
                                                 </View>
                                             </View>
-                                        </View>
-                                    </ImageBackground>
-                                </TouchableHighlight>
-                            ))
-                        }
-                    </View>
+                                        </ImageBackground>
+                                    </TouchableHighlight>
+                                ))
+                            }
+                        </View>
                     </ScrollView>
                 </View>
         )
@@ -180,11 +180,11 @@ export default Address
 const styles = StyleSheet.create({
     signIn: {
         width: '100%',
-        height: 50,
+        height: 60,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 5,
-        borderRadius: 7
+        marginTop: 0,
+        borderRadius: 0
     },
     textSign: {
         fontSize: 18,
