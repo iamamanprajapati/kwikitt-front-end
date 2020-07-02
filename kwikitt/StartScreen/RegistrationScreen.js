@@ -8,11 +8,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import SpinnerButton from 'react-native-spinner-button';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
-
 class RegistrationScreen extends Component {
     constructor() {
         super()
-        {global.MyVar}
+        { global.MyVar }
         this.state = {
             email: '',
             name: '',
@@ -21,7 +20,7 @@ class RegistrationScreen extends Component {
                 ''
             ],
             isSelected: false,
-            defaultLoading:false,
+            defaultLoading: false,
             showAlert: false
         }
     }
@@ -29,7 +28,7 @@ class RegistrationScreen extends Component {
     hideAlert = () => {
         this.setState({
             showAlert: false,
-            defaultLoading:false,
+            defaultLoading: false,
         });
     };
 
@@ -55,27 +54,27 @@ class RegistrationScreen extends Component {
 
     CheckTextInput = (data1) => {
         if (this.state.email != '') {
-          if (this.state.name != '') {
-            axios.post(`${global.MyVar}/user/register`, {
-                email: this.state.email,
-                name: this.state.name,
-                phone: data1,
-                roles: this.state.roles
-            }).then(response => {
-                this.onSubmit(response.data.data.id)
-                this.props.navigation.navigate('HomeScreen')
-            }).catch(error => {
-                this.setState({showAlert:true})
-            })
-          } else {
-            alert('Please Enter Name');
-            this.setState({defaultLoading:false})
-          }
+            if (this.state.name != '') {
+                axios.post(`${global.MyVar}/user/register`, {
+                    email: this.state.email,
+                    name: this.state.name,
+                    phone: data1,
+                    roles: this.state.roles
+                }).then(response => {
+                    this.onSubmit(response.data.data.id)
+                    this.props.navigation.navigate('HomeScreen')
+                }).catch(error => {
+                    this.setState({ showAlert: true })
+                })
+            } else {
+                alert('Please Enter Name');
+                this.setState({ defaultLoading: false })
+            }
         } else {
-          alert('Please Enter Email');
-          this.setState({defaultLoading:false})
+            alert('Please Enter Email');
+            this.setState({ defaultLoading: false })
         }
-      };
+    };
 
     chackBoxChange = (val) => {
         if (val === true) {
@@ -93,8 +92,8 @@ class RegistrationScreen extends Component {
     }
 
     render() {
-        const { data1,id1 } = this.props.route.params
-        const {showAlert}= this.state
+        const { data1, id1 } = this.props.route.params
+        const { showAlert } = this.state
         return (
             <View style={styles.container}>
                 <StatusBar backgroundColor='#009386' />
@@ -144,33 +143,33 @@ class RegistrationScreen extends Component {
                     </View>
                     <View>
                         <SpinnerButton
-                                spinnerType="UIActivityIndicator"
-                                buttonStyle={styles.buttonStyle}
-                                isLoading={this.state.defaultLoading}
-                                onPress={() => {
+                            spinnerType="UIActivityIndicator"
+                            buttonStyle={styles.buttonStyle}
+                            isLoading={this.state.defaultLoading}
+                            onPress={() => {
                                 this.setState({ defaultLoading: true });
                                 this.CheckTextInput(data1)
-                                }}
-                            >
-                                <Text style={styles.textSign}>SignIn</Text>
-                            </SpinnerButton>
+                            }}
+                        >
+                            <Text style={styles.textSign}>SignIn</Text>
+                        </SpinnerButton>
                     </View>
                 </Animatable.View>
                 <AwesomeAlert
-                        show={showAlert}
-                        showProgress={false}
-                        title="Alert"
-                        message="email already exist"
-                        closeOnTouchOutside={true}
-                        closeOnHardwareBackPress={false}
-                        showCancelButton={true}
-                        showConfirmButton={true}
-                        confirmText="OK"
-                        confirmButtonColor="#DD6B55"
-                        onConfirmPressed={() => {
-                            this.hideAlert();
-                        }}
-                    />
+                    show={showAlert}
+                    showProgress={false}
+                    title="Alert"
+                    message="email already exist"
+                    closeOnTouchOutside={true}
+                    closeOnHardwareBackPress={false}
+                    showCancelButton={true}
+                    showConfirmButton={true}
+                    confirmText="OK"
+                    confirmButtonColor="#DD6B55"
+                    onConfirmPressed={() => {
+                        this.hideAlert();
+                    }}
+                />
             </View>
         )
     }
@@ -234,7 +233,7 @@ const styles = StyleSheet.create({
     textSign: {
         fontSize: 18,
         fontWeight: 'bold',
-        color:'white'
+        color: 'white'
     },
     checkbox: {
         alignSelf: "center",
@@ -247,7 +246,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 50,
         backgroundColor: '#009387',
-        borderRadius:7,
-        marginTop:30
-      }
+        borderRadius: 7,
+        marginTop: 30
+    }
 })

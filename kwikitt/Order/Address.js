@@ -36,13 +36,14 @@ export class Address extends Component {
             axios.get(`${global.MyVar}/api/address/list/${id}`)
                 .then(response => {
                     this.setState({
-                        data: response.data.data
+                        data: response.data.data,
                     })
                 }).catch(error => {
                     this.setState({
                         showAlert: true
                     });
                 })
+                
             axios.get(`${global.MyVar}/service/${serviceId}`)
                 .then((response) => {
                     this.setState({

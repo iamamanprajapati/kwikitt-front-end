@@ -28,10 +28,15 @@ export class MyOrders extends Component {
                 const id = this.state.userId
                 axios.get(`${global.MyVar}/booking/list/${id}`)
             .then(response => {
-                this.setState({
-                    data: response.data.data,
-                    isLoading:false
-                })
+                if(response.data.data.length==0){
+                    this.setState({showAlert:true,isLoading:false})
+                }
+                else{
+                    this.setState({
+                        data: response.data.data,
+                        isLoading:false
+                    })
+                }
             })
         } catch (e) {
         }

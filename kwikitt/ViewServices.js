@@ -12,7 +12,6 @@ class ViewServices extends Component {
     constructor(props) {
         super(props)
         { global.MyVar }
-
     }
 
     onSubmit = async (value) => {
@@ -39,11 +38,10 @@ class ViewServices extends Component {
                             }}
                             background={TouchableNativeFeedback.Ripple('#bfbfbf')}
                             >
-                                
                                     <View key={j.name} style={{ flex: 1, flexDirection: 'row' }}>
                                         <View key={j.name} style={{ flex: 1.8 }}>
                                             <View key={j.name} style={{ flex: 2 }}>
-                                                <Text style={{ fontSize: 20, marginLeft: 10, fontWeight: 'bold',marginTop:10 }} >{j.name}</Text>
+                                                <Text style={{ fontSize: 20, marginLeft: 10,marginTop:10 }} >{j.name}</Text>
                                             </View>
                                         </View>
                                         <View key={j.serviceImage} style={{ flex: 1, justifyContent: 'center' }}>
