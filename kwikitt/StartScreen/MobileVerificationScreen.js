@@ -23,6 +23,20 @@ class  MobileVerificationScreen extends Component {
         })
     }
 
+    refreshComponent = () => {
+        this.setState({
+            defaultLoading:false
+        })
+    }
+
+    componentDidMount() {
+        this._unsubscribe = this.props.navigation.addListener('focus', () => this.refreshComponent())
+    }
+
+    componentWillUnmount() {
+        this._unsubscribe();
+    }
+
 
     CheckTextInput = () => {
           if (this.state.phone.length >='10') {

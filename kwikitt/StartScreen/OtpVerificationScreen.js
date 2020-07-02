@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet,TouchableOpacity,Platform,TextInput,StatusBar } from 'react-native'
+import { View, Text, StyleSheet,TouchableOpacity,Platform,TextInput,StatusBar,Alert } from 'react-native'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import * as Animatable from 'react-native-animatable'
 import axios from 'axios'
 import SpinnerButton from 'react-native-spinner-button';
 import AsyncStorage from '@react-native-community/async-storage';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 
 class  OtpVerificationScreen extends Component {
@@ -12,7 +13,8 @@ class  OtpVerificationScreen extends Component {
         super(props)
         this.state={
             otp:'',
-            defaultLoading:false
+            defaultLoading:false,
+            showAlert: false
         }
     }
 
@@ -24,8 +26,23 @@ class  OtpVerificationScreen extends Component {
         }
     }
 
+    refreshComponent = () => {
+        this.setState({
+            defaultLoading:false
+        })
+    }
+
+    componentDidMount() {
+        this._unsubscribe = this.props.navigation.addListener('focus', () => this.refreshComponent())
+    }
+
+    componentWillUnmount() {
+        this._unsubscribe();
+    }
+
     CheckTextInput = (data) => {
         if (this.state.otp.length >='4') {
+            this.setState({defaultLoading:true})
             axios.post(`${global.MyVar}/user/verify/otp/finish`,{
                 otp:this.state.otp,
                 phone:data
@@ -40,17 +57,28 @@ class  OtpVerificationScreen extends Component {
                     this.props.navigation.navigate('HomeScreen')
                   }
               }).catch(error=>{
-                console.warn(error)
+                    this.setState({
+                        showAlert:true
+                    })
               })
         } else {
-            this.setState({defaultLoading:false})
-            alert('Please Enter OTP');
-         
+            alert('please enter otp')
+            this.setState({
+                defaultLoading:false
+            })
         }
       }
+
+    hideAlert = () => {
+        this.setState({
+            showAlert: false,
+            defaultLoading:false,
+        });
+    };
     
 
 render(){
+    const {showAlert} = this.state
     const {data} =this.props.route.params
     return (
         <View style={styles.container}>
@@ -79,13 +107,27 @@ render(){
                                 isLoading={this.state.defaultLoading}
                                 onPress={()=>{
                                     this.CheckTextInput(data)
-                                    this.setState({ defaultLoading: true });
                                   }}
                             >
                                 <Text style={styles.textSign}>OTP Verify</Text>
                             </SpinnerButton>
                 </View>
             </Animatable.View>
+            <AwesomeAlert
+                        show={showAlert}
+                        showProgress={false}
+                        title="Alert"
+                        message="Please Enter a valid OTP"
+                        closeOnTouchOutside={true}
+                        closeOnHardwareBackPress={false}
+                        showCancelButton={true}
+                        showConfirmButton={true}
+                        confirmText="OK"
+                        confirmButtonColor="#DD6B55"
+                        onConfirmPressed={() => {
+                            this.hideAlert();
+                        }}
+                    />
         </View>
     )
 }

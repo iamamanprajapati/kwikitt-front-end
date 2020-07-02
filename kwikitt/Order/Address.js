@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { View, Text, TextInput, Button, TouchableOpacity, ImageBackground, StyleSheet, StatusBar, Image, ScrollView, Dimensions, TouchableHighlight, ActivityIndicator } from 'react-native'
+import { View, Text, TextInput, Button, TouchableOpacity, ImageBackground, StyleSheet, StatusBar, Image, ScrollView, Dimensions, TouchableHighlight, ActivityIndicator, Alert } from 'react-native'
 import { Icon } from 'react-native-elements'
 import LinearGradient from 'react-native-linear-gradient'
 import AsyncStorage from '@react-native-community/async-storage';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const Width = Dimensions.get('window').width;
 
@@ -19,7 +20,8 @@ export class Address extends Component {
             serviceImages: '',
             desc: '',
             servId: null,
-            isLoading: true
+            isLoading: true,
+            showAlert: false
         }
     }
 
@@ -34,8 +36,12 @@ export class Address extends Component {
             axios.get(`${global.MyVar}/api/address/list/${id}`)
                 .then(response => {
                     this.setState({
-                        data: response.data.data,
+                        data: response.data.data
                     })
+                }).catch(error => {
+                    this.setState({
+                        showAlert: true
+                    });
                 })
             axios.get(`${global.MyVar}/service/${serviceId}`)
                 .then((response) => {
@@ -51,6 +57,19 @@ export class Address extends Component {
         }
     }
 
+    addAddress = () => {
+        this.setState({
+            showAlert: false
+        });
+        this.props.navigation.navigate('AddAddress', { id: this.state.userId })
+    };
+
+    hideAlert = () => {
+        this.setState({
+            showAlert: false
+        });
+    };
+
     onSubmit = async (value) => {
         try {
             await AsyncStorage.setItem('token', JSON.stringify(value))
@@ -59,11 +78,9 @@ export class Address extends Component {
         }
     }
 
-
     refreshComponent = () => {
         this.getData()
     }
-
 
     componentDidMount() {
         this._unsubscribe = this.props.navigation.addListener('focus', () => this.refreshComponent())
@@ -73,6 +90,7 @@ export class Address extends Component {
         this._unsubscribe();
     }
     render() {
+        const { showAlert } = this.state;
         const { data } = this.state
         const { serviceImages, isLoading } = this.state
 
@@ -170,6 +188,25 @@ export class Address extends Component {
                             }
                         </View>
                     </ScrollView>
+                    <AwesomeAlert
+                        show={showAlert}
+                        showProgress={false}
+                        title="Alert"
+                        message="Please Add a new address"
+                        closeOnTouchOutside={true}
+                        closeOnHardwareBackPress={false}
+                        showCancelButton={true}
+                        showConfirmButton={true}
+                        cancelText="No, cancel"
+                        confirmText="OK"
+                        confirmButtonColor="#DD6B55"
+                        onCancelPressed={() => {
+                            this.hideAlert();
+                        }}
+                        onConfirmPressed={() => {
+                            this.addAddress();
+                        }}
+                    />
                 </View>
         )
     }

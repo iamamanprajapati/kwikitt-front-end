@@ -6,6 +6,8 @@ import * as Animatable from 'react-native-animatable'
 import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage';
 import SpinnerButton from 'react-native-spinner-button';
+import AwesomeAlert from 'react-native-awesome-alerts';
+
 
 class RegistrationScreen extends Component {
     constructor() {
@@ -19,9 +21,17 @@ class RegistrationScreen extends Component {
                 ''
             ],
             isSelected: false,
-            defaultLoading:false
+            defaultLoading:false,
+            showAlert: false
         }
     }
+
+    hideAlert = () => {
+        this.setState({
+            showAlert: false,
+            defaultLoading:false,
+        });
+    };
 
     onSubmit = async (value) => {
         try {
@@ -55,7 +65,7 @@ class RegistrationScreen extends Component {
                 this.onSubmit(response.data.data.id)
                 this.props.navigation.navigate('HomeScreen')
             }).catch(error => {
-                console.warn(error)
+                this.setState({showAlert:true})
             })
           } else {
             alert('Please Enter Name');
@@ -66,7 +76,6 @@ class RegistrationScreen extends Component {
           this.setState({defaultLoading:false})
         }
       };
-
 
     chackBoxChange = (val) => {
         if (val === true) {
@@ -85,7 +94,7 @@ class RegistrationScreen extends Component {
 
     render() {
         const { data1,id1 } = this.props.route.params
-
+        const {showAlert}= this.state
         return (
             <View style={styles.container}>
                 <StatusBar backgroundColor='#009386' />
@@ -111,7 +120,6 @@ class RegistrationScreen extends Component {
                             value={this.state.email}
                         />
                     </View>
-
                     <View style={styles.action}>
                         <MaterialCommunityIcons
                             name='account'
@@ -126,7 +134,6 @@ class RegistrationScreen extends Component {
                             }}
                         />
                     </View>
-
                     <View style={styles.action}>
                         <CheckBox
                             value={this.state.isSelected}
@@ -147,14 +154,27 @@ class RegistrationScreen extends Component {
                             >
                                 <Text style={styles.textSign}>SignIn</Text>
                             </SpinnerButton>
-
                     </View>
                 </Animatable.View>
+                <AwesomeAlert
+                        show={showAlert}
+                        showProgress={false}
+                        title="Alert"
+                        message="email already exist"
+                        closeOnTouchOutside={true}
+                        closeOnHardwareBackPress={false}
+                        showCancelButton={true}
+                        showConfirmButton={true}
+                        confirmText="OK"
+                        confirmButtonColor="#DD6B55"
+                        onConfirmPressed={() => {
+                            this.hideAlert();
+                        }}
+                    />
             </View>
         )
     }
 }
-
 
 export default RegistrationScreen;
 

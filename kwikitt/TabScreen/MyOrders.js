@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios'
 import {Header} from '../Header'
 import Timestamp from 'react-timestamp';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 export class MyOrders extends Component {
 
@@ -14,7 +15,8 @@ export class MyOrders extends Component {
           data:[],
           serviceName:'',
           userId:null,
-          isLoading:true
+          isLoading:true,
+          showAlert: false
         }
       } 
 
@@ -32,9 +34,15 @@ export class MyOrders extends Component {
                 })
             })
         } catch (e) {
-            console.warn(e)
         }
     }
+
+    hideAlert = () => {
+        this.setState({
+          showAlert: false
+        });
+      };
+
 
     refreshComponent = () =>{
         this.getData()
@@ -49,7 +57,7 @@ export class MyOrders extends Component {
       }
 
     render() {
-
+        const {showAlert} = this.state
         const {data,isLoading} = this.state
 
         return (
@@ -84,6 +92,21 @@ export class MyOrders extends Component {
                 ))
             }
       </ScrollView>
+                     <AwesomeAlert
+                            show={showAlert}
+                            showProgress={false}
+                            title="Alert"
+                            message="You have no any booking"
+                            closeOnTouchOutside={true}
+                            closeOnHardwareBackPress={false}
+                            showCancelButton={false}
+                            showConfirmButton={true}
+                            confirmText="OK"
+                            confirmButtonColor="#DD6B55"
+                            onConfirmPressed={() => {
+                                this.hideAlert();
+                            }}
+                            />
       </View>
       </View>
         )
