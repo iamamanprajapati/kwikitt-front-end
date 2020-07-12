@@ -197,7 +197,7 @@ unCheck=()=>{
               style={styles.checkbox}
             />
             <Text style={styles.label}>
-            क्या आप सर्विस देना चाहते हैं ?
+            क्या आप भी सर्विस देना चाहते हैं ?
             </Text>
           </View>
           <View>

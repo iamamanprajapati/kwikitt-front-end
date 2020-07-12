@@ -6,6 +6,8 @@ import axios from 'axios';
 import SpinnerButton from 'react-native-spinner-button';
 import AsyncStorage from '@react-native-community/async-storage';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import messaging from '@react-native-firebase/messaging';
+
 
 class OtpVerificationScreen extends Component {
   constructor(props) {
@@ -25,19 +27,11 @@ class OtpVerificationScreen extends Component {
     }
   };
 
-  onRoleSubmit = async (r) =>{
-    try {
-      await AsyncStorage.setItem('role', r);
-    } catch (error) {
-      console.warn(e);
-    }
-  }
-
-  checkService = (id)=>{
+  checkService = (id,r)=>{
       axios.get(`${global.MyVar}/service-partner/list/service/${id}`)
       .then(response=>{
         if(response.data.data.length===0){
-          this.props.navigation.navigate('LoginServiceScreen',{userId:id});
+          this.props.navigation.navigate('LoginServiceScreen',{userId:id,r:r});
         }
         else{
           this.props.navigation.navigate('HomeScreen');
@@ -70,6 +64,12 @@ class OtpVerificationScreen extends Component {
           phone: data,
         })
         .then((response) => {
+          messaging().getToken().then(
+            token=>{
+              console.log(token)
+              axios.post(`${global.MyVar}/user/${response.data.data.id}/fcm/token`, {token:token})
+            }
+          )
           if (!response.data.data.isRegistered) {
             this.props.navigation.navigate('RegistrationScreen', {
               data1: data,
@@ -77,8 +77,7 @@ class OtpVerificationScreen extends Component {
           } else {
                 this.onSubmit(response.data.data.id);
                     if(response.data.data.roles[1]){
-                      this.onRoleSubmit(response.data.data.roles[1])
-                      this.checkService(response.data.data.id);
+                      this.checkService(response.data.data.id,response.data.data.roles[1]);
                     }
                     else{
                       this.props.navigation.navigate('HomeScreen');

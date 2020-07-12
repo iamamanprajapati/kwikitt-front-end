@@ -20,7 +20,7 @@ class SplashScreen extends Component {
   constructor() {
     super();
     console.warn('run');
-    global.MyVar = 'http://31be0ecc963a.ngrok.io';
+    global.MyVar = 'http://147.139.33.186';
     this.state = {
       userId: null,
       isLoading: true,
@@ -44,7 +44,7 @@ class SplashScreen extends Component {
           if (response.data.data.status === false) {
             Alert.alert(
               'please update the app to use our services',
-              'Would you like to authenticate using fingerprint ?',
+              '',
               [
                 {text: 'Yes', onPress: this.openURL},
               ],
@@ -56,6 +56,7 @@ class SplashScreen extends Component {
       console.warn(e);
     }
   };
+
 
   openURL = () => {
     Linking.openURL('market://details?id=in.kwikitt');

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import messaging from '@react-native-firebase/messaging';
 
 import {
   View,
@@ -105,12 +104,7 @@ export class CategoryScreen extends Component {
   };
 
   refreshCategory = () => {
-    messaging().getToken().then(
-      token=>{
-        console.log(token)
-        axios.post(`${global.MyVar}/user/${this.state.userId}/fcm/token`,token)
-      }
-    )
+    
     serviceApi.retrieveAllCategory().then((response) => {
       this.setState({data: response.data.data, isLoading: false});
     });
