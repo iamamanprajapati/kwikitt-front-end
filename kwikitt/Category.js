@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import messaging from '@react-native-firebase/messaging';
+
 import {
   View,
   Text,
@@ -20,6 +22,7 @@ import ViewServices from './ViewServices';
 import Order from './Order/Order';
 import AsyncStorage from '@react-native-community/async-storage';
 import PushNotification from 'react-native-push-notification';
+import axios from 'axios';
 
 const Width = Dimensions.get('window').width;
 const W1 = Width / 2 - 5;
@@ -54,8 +57,8 @@ export class CategoryScreen extends Component {
   };
 
   refreshComponent = () => {
-    this.refreshCategory();
     this.getData();
+    this.refreshCategory();
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   };
 
@@ -102,6 +105,12 @@ export class CategoryScreen extends Component {
   };
 
   refreshCategory = () => {
+    messaging().getToken().then(
+      token=>{
+        console.log(token)
+        axios.post(`${global.MyVar}/user/${this.state.userId}/fcm/token`,token)
+      }
+    )
     serviceApi.retrieveAllCategory().then((response) => {
       this.setState({data: response.data.data, isLoading: false});
     });

@@ -3,11 +3,8 @@ import { Text, View } from 'react-native'
 
 
 export class Checkbox extends Component {
-
     constructor() {
-  
       super();
-  
       this.state = { checked: null }
     }
   

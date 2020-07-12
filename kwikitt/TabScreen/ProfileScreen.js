@@ -40,6 +40,7 @@ export class ProfileScreen extends Component {
   onSubmit = async (value) => {
     try {
       await AsyncStorage.setItem('token', '');
+      await AsyncStorage.setItem('role', '');
     } catch (e) {
       console.warn(e);
     }

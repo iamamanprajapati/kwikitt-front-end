@@ -122,6 +122,7 @@ unCheck=()=>{
             roles: this.state.roles,
           })
           .then((response) => {
+            console.log(response.data.data.roles[1])
             this.onSubmit(response.data.data.id);
               this.props.navigation.navigate('HomeScreen');
           })
@@ -196,7 +197,7 @@ unCheck=()=>{
               style={styles.checkbox}
             />
             <Text style={styles.label}>
-              Do you want to be make service provider?
+            क्या आप सर्विस देना चाहते हैं ?
             </Text>
           </View>
           <View>

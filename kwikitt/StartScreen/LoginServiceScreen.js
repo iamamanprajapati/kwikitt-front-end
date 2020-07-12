@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 
-import { Alert, Image, StyleSheet, Text, TouchableHighlight, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Alert, Image, StyleSheet, Text, TouchableHighlight, View, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import SpinnerButton from 'react-native-spinner-button';
 
@@ -101,7 +101,7 @@ class Checkbox extends Component {
   }
 }
 
-export class ServiceScreen extends Component {
+export class LoginServiceScreen extends Component {
 
   constructor(props) {
     super(props);
@@ -135,49 +135,36 @@ export class ServiceScreen extends Component {
     });
   }
 
-  onSubmit = async (value,r) => {
+  onSubmit = async (value) => {
     try {
       await AsyncStorage.setItem('token', JSON.stringify(value));
-      await AsyncStorage.setItem('role', r);
     } catch (e) {
       console.warn(e);
     }
   };
 
-  registration = (email, name, roles) => {
+  registration = (userId) => {
     this.setState({ defaultLoading: true })
     axios
-      .post(`${global.MyVar}/user/register`, {
-        email: email,
-        name: name,
-        phone: this.state.phone,
-        roles: roles,
+      .post(`${global.MyVar}/service-partner/assign-service`, {
+        services:selectedArrayOBJ.getArray().map(item => item.value),
+        userId:userId,
       })
       .then((response) => {
-        this.onSubmit(response.data.data.id,response.data.data.roles[1]);
-        axios.post(`${global.MyVar}/service-partner/assign-service`, {
-          services: selectedArrayOBJ.getArray().map(item => item.value),
-          userId: response.data.data.id
-        }).then(response => (
-          this.props.navigation.navigate('HomeScreen')
-        ))
+        this.onSubmit(userId);
+        this.props.navigation.navigate('HomeScreen');
       });
   }
 
-  getId = async () => {
-    const value = await AsyncStorage.getItem('token');
-    const abcd = JSON.parse(value);
-    this.setState({ userId: abcd });
+
+  getSelectedItems = (userId) => {
+      console.log(userId)
+      this.registration(userId);
+      console.log(selectedArrayOBJ.getArray().map(item => item.value));
   }
 
-  getSelectedItems = (email, name, roles) => {
-      this.registration(email, name, roles);
-      this.getId();
-      console.log(selectedArrayOBJ.getArray().map(item => item.value));
-    }
-
   render() {
-    const { email, name, roles } = this.props.route.params
+    const { userId } = this.props.route.params
     return (
       <View style={styles.MainContainer}>
         <Text style={{ fontSize: 20 }}>इनमे से आप कौन से कार्य कर सकते हैं ?</Text>
@@ -214,7 +201,7 @@ export class ServiceScreen extends Component {
             spinnerType="UIActivityIndicator"
             buttonStyle={styles.buttonStyle}
             isLoading={this.state.defaultLoading}
-            onPress={() => this.getSelectedItems(email, name, roles)}>
+            onPress={() => this.getSelectedItems(userId)}>
             <Text style={styles.textSign}>Sign-In</Text>
           </SpinnerButton>
         </View>
@@ -224,7 +211,7 @@ export class ServiceScreen extends Component {
 }
 
 
-export default ServiceScreen;
+export default LoginServiceScreen;
 
 const styles = StyleSheet.create(
   {

@@ -25,6 +25,26 @@ class OtpVerificationScreen extends Component {
     }
   };
 
+  onRoleSubmit = async (r) =>{
+    try {
+      await AsyncStorage.setItem('role', r);
+    } catch (error) {
+      console.warn(e);
+    }
+  }
+
+  checkService = (id)=>{
+      axios.get(`${global.MyVar}/service-partner/list/service/${id}`)
+      .then(response=>{
+        if(response.data.data.length===0){
+          this.props.navigation.navigate('LoginServiceScreen',{userId:id});
+        }
+        else{
+          this.props.navigation.navigate('HomeScreen');
+        }
+      })
+  }
+
   refreshComponent = () => {
     this.setState({
       defaultLoading: false,
@@ -55,8 +75,14 @@ class OtpVerificationScreen extends Component {
               data1: data,
             });
           } else {
-            this.onSubmit(response.data.data.id);
-            this.props.navigation.navigate('HomeScreen');
+                this.onSubmit(response.data.data.id);
+                    if(response.data.data.roles[1]){
+                      this.onRoleSubmit(response.data.data.roles[1])
+                      this.checkService(response.data.data.id);
+                    }
+                    else{
+                      this.props.navigation.navigate('HomeScreen');
+                    }
           }
         })
         .catch((error) => {

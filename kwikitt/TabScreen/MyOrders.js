@@ -56,7 +56,7 @@ export class MyOrders extends Component {
       const abcd = JSON.parse(value);
       this.setState({userId: abcd});
       const id = this.state.userId;
-      axios.get(`${global.MyVar}/booking/list/${id}`).then((response) => {
+      axios.get(`${global.MyVar}/booking/list/user/${id}`).then((response) => {
         console.log(response.data);
         if (response.data.data.length === 0) {
           this.setState({showAlert: true, isLoading: false});

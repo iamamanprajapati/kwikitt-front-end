@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
-import {Header} from '../Header';
+import { Header } from '../Header';
 import Timestamp from 'react-timestamp';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
@@ -54,14 +54,16 @@ export class PartnerScreen extends Component {
   getData = async () => {
     try {
       const value = await AsyncStorage.getItem('token');
+      const r = await AsyncStorage.getItem('role');
       const abcd = JSON.parse(value);
-      this.setState({userId: abcd});
+      this.setState({ userId: abcd });
       const id = this.state.userId;
       axios
         .get(`${global.MyVar}/booking/list/partner/${id}`)
         .then((response) => {
-          if (response.data.data.length === 0) {
-            this.setState({showAlert: true, isLoading: false});
+          console.log(r);
+          if (r !== "ROLE_SERVICE_PROVIDER") {
+            this.setState({ showAlert: true, isLoading: false });
           } else {
             this.setState({
               data: response.data.data,
@@ -75,7 +77,7 @@ export class PartnerScreen extends Component {
             showAlert: true,
           });
         });
-    } catch (e) {}
+    } catch (e) { }
   };
 
   hideAlert = () => {
@@ -99,105 +101,105 @@ export class PartnerScreen extends Component {
   }
 
   render() {
-    const {showAlert} = this.state;
-    const {data, isLoading} = this.state;
+    const { showAlert } = this.state;
+    const { data, isLoading } = this.state;
 
     return isLoading === true ? (
       <ActivityIndicator
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         animating={true}
         size="large"
         color="#0000ff"
       />
     ) : (
-      <View style={{flex: 1}}>
-        <Header />
-        <View style={{flex: 1}}>
-          <ScrollView style={{flex: 1}}>
-            {data.map((list) => (
-              <View
-                key={list.id}
-                style={{flex: 1, flexDirection: 'column-reverse'}}>
-                <ImageBackground
-                  style={{
-                    marginTop: 5,
-                    marginLeft: 5,
-                    marginRight: 5,
-                    backgroundColor: 'white',
-                    borderWidth: 0,
-                    borderColor: 'white',
-                    marginTop: 4,
-                    elevation: 4,
-                    height: 150,
-                  }}>
-                  <TouchableNativeFeedback>
-                    <View style={{flex: 1, flexDirection: 'column'}}>
-                      <View style={{flex: 3, flexDirection: 'row'}}>
-                        <View style={{flex: 2}}>
-                          <Text style={{fontSize: 16, marginLeft: 10}}>
-                            {list.service.name}
-                          </Text>
-                          <Text>{list.rating}</Text>
-                          <Text
-                            style={{
-                              marginLeft: 10,
-                              marginTop: 10,
-                              fontSize: 10,
-                              color: 'green',
-                            }}>
-                            {'\u2B24'}
-                            <Text style={{fontSize: 12}}>
-                              {' '}
-                              <Timestamp
-                                time={list.bookingDate / 1000}
-                                format="full"
-                                component={Text}
-                              />
+        <View style={{ flex: 1 }}>
+          <Header />
+          <View style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1 }}>
+              {data.map((list) => (
+                <View
+                  key={list.id}
+                  style={{ flex: 1, flexDirection: 'column-reverse' }}>
+                  <ImageBackground
+                    style={{
+                      marginTop: 5,
+                      marginLeft: 5,
+                      marginRight: 5,
+                      backgroundColor: 'white',
+                      borderWidth: 0,
+                      borderColor: 'white',
+                      marginTop: 4,
+                      elevation: 4,
+                      height: 150,
+                    }}>
+                    <TouchableNativeFeedback>
+                      <View style={{ flex: 1, flexDirection: 'column' }}>
+                        <View style={{ flex: 3, flexDirection: 'row' }}>
+                          <View style={{ flex: 2 }}>
+                            <Text style={{ fontSize: 16, marginLeft: 10 }}>
+                              {list.service.name}
                             </Text>
-                          </Text>
-                          <Text
-                            style={{
-                              marginLeft: 12,
-                              marginTop: 20,
-                              fontSize: 14,
-                              color: 'red',
-                            }}>
-                            {this.getStatus(list.bookingStatus)}
-                          </Text>
-                        </View>
-                        <View style={{flex: 1, justifyContent: 'center'}}>
-                          <Image
-                            style={{height: 100, width: 100}}
-                            source={{
-                              uri: `${global.MyVar}/uploads/services/${list.service.serviceImage}`,
-                            }}
-                          />
+                            <Text>{list.rating}</Text>
+                            <Text
+                              style={{
+                                marginLeft: 10,
+                                marginTop: 10,
+                                fontSize: 10,
+                                color: 'green',
+                              }}>
+                              {'\u2B24'}
+                              <Text style={{ fontSize: 12 }}>
+                                {' '}
+                                <Timestamp
+                                  time={list.bookingDate / 1000}
+                                  format="full"
+                                  component={Text}
+                                />
+                              </Text>
+                            </Text>
+                            <Text
+                              style={{
+                                marginLeft: 12,
+                                marginTop: 20,
+                                fontSize: 14,
+                                color: 'red',
+                              }}>
+                              {this.getStatus(list.bookingStatus)}
+                            </Text>
+                          </View>
+                          <View style={{ flex: 1, justifyContent: 'center' }}>
+                            <Image
+                              style={{ height: 100, width: 100 }}
+                              source={{
+                                uri: `${global.MyVar}/uploads/services/${list.service.serviceImage}`,
+                              }}
+                            />
+                          </View>
                         </View>
                       </View>
-                    </View>
-                  </TouchableNativeFeedback>
-                </ImageBackground>
-              </View>
-            ))}
-          </ScrollView>
-          <AwesomeAlert
-            show={showAlert}
-            showProgress={false}
-            title="Alert"
-            message="You are not partner of kwikitt team"
-            closeOnTouchOutside={false}
-            closeOnHardwareBackPress={false}
-            showCancelButton={false}
-            showConfirmButton={false}
-            confirmText="OK"
-            confirmButtonColor="#DD6B55"
-            onConfirmPressed={() => {
-              this.hideAlert();
-            }}
-          />
+                    </TouchableNativeFeedback>
+                  </ImageBackground>
+                </View>
+              ))}
+            </ScrollView>
+            <AwesomeAlert
+              show={showAlert}
+              showProgress={false}
+              title="Alert"
+              message="You are not partner of kwikitt team"
+              closeOnTouchOutside={false}
+              closeOnHardwareBackPress={false}
+              showCancelButton={false}
+              showConfirmButton={false}
+              confirmText="OK"
+              confirmButtonColor="#DD6B55"
+              onConfirmPressed={() => {
+                this.hideAlert();
+              }}
+            />
+          </View>
         </View>
-      </View>
-    );
+      );
   }
 }
 
