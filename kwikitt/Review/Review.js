@@ -4,15 +4,6 @@ import SpinnerButton from 'react-native-spinner-button';
 import axios from 'axios'
 
 
-const UselessTextInput = (props) => {
-    return (
-      <TextInput
-        {...props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
-        editable
-        maxLength={40}
-      />
-    );
-  }
 
 class Review extends Component {
   constructor(props) {
@@ -46,31 +37,22 @@ class Review extends Component {
     BackHandler.removeEventListener("hardwareBackPress", this.backAction);
   }
 
-  
 
   render() {
     const {id,rating} = this.props.route.params
     return (
-      <View>
-          <UselessTextInput
-          style={{borderWidth:1}}
-        multiline
-        numberOfLines={10}
-        onChangeText={text => {
-            this.setState({message:text})
-        }}
-        value={this.state.message}
-      />
-        {/* <TextInput
-              placeholder="Review"
+      <View style={{flex:1,alignItems:'center'}}>
+        <TextInput
+              
+              placeholder="Write Your Review"
               editable
-              style={{borderWidth:1,marginTop:10}}
+              style={{borderWidth:1,marginTop:10,width:350,textAlignVertical: 'top',fontSize:20}}
               multiline={true}
-              numberOfLines={5}
+              numberOfLines={10}
               onChangeText={(text) => {
                 this.setState({message: text});
               }}
-            /> */}
+            />
             <SpinnerButton
               spinnerType="UIActivityIndicator"
               buttonStyle={styles.buttonStyle}
@@ -97,10 +79,12 @@ const styles = StyleSheet.create({
   buttonStyle: {
     justifyContent: 'center',
     alignItems: 'center',
+    alignSelf:'center',
     height: 50,
     backgroundColor: '#009387',
     borderRadius: 7,
     marginTop: 30,
+    width:200
   },
 });
 
