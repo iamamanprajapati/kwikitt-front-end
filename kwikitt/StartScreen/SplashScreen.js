@@ -20,7 +20,7 @@ class SplashScreen extends Component {
   constructor() {
     super();
     console.warn('run');
-    global.MyVar = 'http://147.139.33.186';
+    global.MyVar = 'http://a55d89b3bcfd.ngrok.io';
     this.state = {
       userId: null,
       isLoading: true,

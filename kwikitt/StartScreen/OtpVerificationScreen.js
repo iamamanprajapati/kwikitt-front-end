@@ -147,7 +147,7 @@ class OtpVerificationScreen extends Component {
           title="Alert"
           message="Please Enter a valid OTP"
           closeOnTouchOutside={true}
-          closeOnHardwareBackPress={false}
+          closeOnHardwareBackPress={true}
           showCancelButton={true}
           showConfirmButton={true}
           confirmText="OK"

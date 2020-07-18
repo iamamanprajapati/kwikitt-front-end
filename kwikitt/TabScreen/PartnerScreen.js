@@ -92,13 +92,14 @@ export class PartnerScreen extends Component {
 
   componentDidMount() {
     this._unsubscribe = this.props.navigation.addListener('focus', () =>
-      this.refreshComponent(),
+      this.refreshComponent()
     );
   }
 
   componentWillUnmount() {
     this._unsubscribe();
   }
+
 
   render() {
     const { showAlert } = this.state;
@@ -188,7 +189,7 @@ export class PartnerScreen extends Component {
               title="Alert"
               message="You are not partner of kwikitt team"
               closeOnTouchOutside={false}
-              closeOnHardwareBackPress={false}
+              closeOnHardwareBackPress={true}
               showCancelButton={false}
               showConfirmButton={false}
               confirmText="OK"

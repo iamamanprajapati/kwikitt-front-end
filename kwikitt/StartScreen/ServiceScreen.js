@@ -135,7 +135,7 @@ export class ServiceScreen extends Component {
     });
   }
 
-  onSubmit = async (value,r) => {
+  onSubmit = async (value, r) => {
     try {
       await AsyncStorage.setItem('token', JSON.stringify(value));
       await AsyncStorage.setItem('role', r);
@@ -154,7 +154,7 @@ export class ServiceScreen extends Component {
         roles: roles,
       })
       .then((response) => {
-        this.onSubmit(response.data.data.id,response.data.data.roles[1]);
+        this.onSubmit(response.data.data.id, response.data.data.roles[1]);
         axios.post(`${global.MyVar}/service-partner/assign-service`, {
           services: selectedArrayOBJ.getArray().map(item => item.value),
           userId: response.data.data.id
@@ -171,10 +171,10 @@ export class ServiceScreen extends Component {
   }
 
   getSelectedItems = (email, name, roles) => {
-      this.registration(email, name, roles);
-      this.getId();
-      console.log(selectedArrayOBJ.getArray().map(item => item.value));
-    }
+    this.registration(email, name, roles);
+    this.getId();
+    console.log(selectedArrayOBJ.getArray().map(item => item.value));
+  }
 
   render() {
     const { email, name, roles } = this.props.route.params

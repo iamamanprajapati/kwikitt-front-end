@@ -264,7 +264,7 @@ export class Address extends Component {
           title="Alert"
           message="Please Add a new address"
           closeOnTouchOutside={true}
-          closeOnHardwareBackPress={false}
+          closeOnHardwareBackPress={true}
           showCancelButton={true}
           showConfirmButton={true}
           cancelText="No, cancel"

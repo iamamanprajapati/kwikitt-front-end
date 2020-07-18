@@ -219,7 +219,7 @@ unCheck=()=>{
           title="Alert"
           message="email already exist"
           closeOnTouchOutside={true}
-          closeOnHardwareBackPress={false}
+          closeOnHardwareBackPress={true}
           showCancelButton={true}
           showConfirmButton={true}
           confirmText="OK"
