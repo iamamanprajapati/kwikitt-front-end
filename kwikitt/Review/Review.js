@@ -39,7 +39,7 @@ class Review extends Component {
 
 
   render() {
-    const {id,rating} = this.props.route.params
+    const {review,id,rating} = this.props.route.params
     return (
       <View style={{flex:1,alignItems:'center'}}>
         <TextInput

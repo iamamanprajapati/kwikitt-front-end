@@ -14,8 +14,12 @@ import axios from 'axios';
 import { Header } from '../Header';
 import Timestamp from 'react-timestamp';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { createStackNavigator } from '@react-navigation/stack'
+import ChangeBookingStatus from '../Partner/ChangeBookingStatus'
+import Help from '../Partner/Help'
 
-export class PartnerScreen extends Component {
+
+export class Partner extends Component {
   constructor(props) {
     super(props);
     global.MyVar;
@@ -80,6 +84,20 @@ export class PartnerScreen extends Component {
     } catch (e) { }
   };
 
+  StoreOrderId = async (value) => {
+    console.log(value)
+    try {
+      await AsyncStorage.setItem('bookingId', JSON.stringify(value));
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
+  RenderReview = (id, bookingStatus, name, time, image, address, feedback, userId) => {
+    this.StoreOrderId(id);
+    this.props.navigation.navigate('ChangeBookingStatus', { id: id, bookingStatus: bookingStatus, name: name, time: time, image: image, address: address, feedback: feedback, userId: userId })
+  }
+
   hideAlert = () => {
     this.setState({
       showAlert: false,
@@ -133,7 +151,7 @@ export class PartnerScreen extends Component {
                       elevation: 4,
                       height: 150,
                     }}>
-                    <TouchableNativeFeedback>
+                    <TouchableNativeFeedback onPress={() => this.RenderReview(list.id, list.bookingStatus, list.service.name, list.bookingDate / 1000, list.service.serviceImage, list.address, list.feedback, list.usersByCustomer.name)} >
                       <View style={{ flex: 1, flexDirection: 'column' }}>
                         <View style={{ flex: 3, flexDirection: 'row' }}>
                           <View style={{ flex: 2 }}>
@@ -201,6 +219,22 @@ export class PartnerScreen extends Component {
           </View>
         </View>
       );
+  }
+}
+
+const Stack = createStackNavigator();
+
+export class PartnerScreen extends Component {
+  render() {
+    return (
+      <Stack.Navigator screenOptions={{
+        headerShown: false,
+      }}>
+        <Stack.Screen name="PartnerScreen" component={Partner} />
+        <Stack.Screen name="ChangeBookingStatus" component={ChangeBookingStatus} />
+        <Stack.Screen name="Help" component={Help} />
+      </Stack.Navigator>
+    )
   }
 }
 

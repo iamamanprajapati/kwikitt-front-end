@@ -7,6 +7,7 @@ import {
   ScrollView,
   ImageBackground,
   Dimensions,
+  BackHandler,
 } from 'react-native';
 import Header from './Header';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -19,6 +20,18 @@ class ViewServices extends Component {
   constructor(props) {
     super(props);
     global.MyVar;
+  }
+
+  backAction = async () => {
+    this.props.navigation.navigate('Category')
+  };
+
+  componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.backAction);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.backAction);
   }
 
   onSubmit = async (value) => {

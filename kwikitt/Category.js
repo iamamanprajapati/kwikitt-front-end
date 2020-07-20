@@ -186,7 +186,7 @@ export class CategoryScreen extends Component {
 
 const Stack = createStackNavigator();
 
-export default class Category extends Component {
+export class Category extends Component {
   render() {
     return (
       <Stack.Navigator
@@ -200,5 +200,7 @@ export default class Category extends Component {
     );
   }
 }
+
+export default Category;
 
 console.disableYellowBox = true;

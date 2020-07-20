@@ -4,7 +4,7 @@ import {Component} from 'react';
 class ServiceApi extends Component {
   constructor(props) {
     super(props);
-    global.MyVar = 'http://a55d89b3bcfd.ngrok.io';
+    global.MyVar = 'http://1e21c0bb3d27.ngrok.io';
   }
 
   retrieveAllCategory() {

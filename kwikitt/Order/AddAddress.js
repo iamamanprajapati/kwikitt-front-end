@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TextInput,
   StatusBar,
   Alert,
+  BackHandler,
 } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -28,15 +29,27 @@ class AddAddress extends Component {
     try {
       const value = await AsyncStorage.getItem('token');
       const abcd = JSON.parse(value);
-      this.setState({userId: abcd});
+      this.setState({ userId: abcd });
     } catch (e) {
       console.warn(e);
     }
   };
 
+  backAction = async () => {
+    this.props.navigation.navigate('Address')
+  };
+
   componentDidMount() {
     this.getData();
+    BackHandler.addEventListener("hardwareBackPress", this.backAction);
   }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+  }
+
+
+
 
   CheckTextInput = () => {
     if (this.state.street.length >= '2') {
@@ -55,7 +68,7 @@ class AddAddress extends Component {
           console.log(error);
         });
     } else {
-      this.setState({defaultLoading: false});
+      this.setState({ defaultLoading: false });
       Alert.alert('Please Enter Address');
     }
   };
@@ -70,7 +83,7 @@ class AddAddress extends Component {
               placeholder="Area, Colony, Street, Sector"
               style={styles.textInput}
               onChangeText={(text) => {
-                this.setState({street: text});
+                this.setState({ street: text });
               }}
               value={this.state.street}
             />
@@ -82,7 +95,7 @@ class AddAddress extends Component {
               editable={false}
               style={styles.textInput}
               onChangeText={(text) => {
-                this.setState({city: text});
+                this.setState({ city: text });
               }}
               value={this.state.city}
             />
@@ -95,7 +108,7 @@ class AddAddress extends Component {
               style={styles.textInput}
               keyboardType="number-pad"
               onChangeText={(text) => {
-                this.setState({pinCode: text});
+                this.setState({ pinCode: text });
               }}
               value={this.state.pinCode}
             />
@@ -107,7 +120,7 @@ class AddAddress extends Component {
               editable={false}
               style={styles.textInput}
               onChangeText={(text) => {
-                this.setState({state: text});
+                this.setState({ state: text });
               }}
               value={this.state.state}
             />
@@ -119,7 +132,7 @@ class AddAddress extends Component {
               buttonStyle={styles.buttonStyle}
               isLoading={this.state.defaultLoading}
               onPress={() => {
-                this.setState({defaultLoading: true});
+                this.setState({ defaultLoading: true });
                 this.CheckTextInput();
               }}>
               <Text style={styles.textSign}>Add Address</Text>

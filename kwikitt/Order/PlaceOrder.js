@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,13 @@ import {
   StyleSheet,
   TextInput,
   ImageBackground,
+  BackHandler,
+  ActivityIndicator
 } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import SpinnerButton from 'react-native-spinner-button';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 
 class PlaceOrder extends Component {
   constructor() {
@@ -24,6 +26,7 @@ class PlaceOrder extends Component {
       servId: null,
       userId: null,
       defaultLoading: false,
+      isLoading: true,
     };
   }
 
@@ -33,12 +36,13 @@ class PlaceOrder extends Component {
       const abcd = JSON.parse(value1);
       const value2 = await AsyncStorage.getItem('orderId');
       const serviceId = JSON.parse(value2);
-      this.setState({servId: serviceId, userId: abcd});
+      this.setState({ servId: serviceId, userId: abcd });
       axios.get(`${global.MyVar}/service/${serviceId}`).then((response) => {
         this.setState({
           names: response.data.name,
           serviceImages: response.data.serviceImage,
           desc: response.data.description,
+          isLoading: false,
         });
       });
     } catch (e) {
@@ -64,100 +68,116 @@ class PlaceOrder extends Component {
         });
     } else {
       alert('Please Provide Service Timing ');
-      this.setState({defaultLoading: false});
+      this.setState({ defaultLoading: false });
     }
   };
 
+  backAction = async () => {
+    this.props.navigation.navigate('Address')
+  };
+
   componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.backAction);
     this.getData();
   }
 
-  render() {
-    const {addId, street, city, state, pinCode} = this.props.route.params;
-    const {serviceImages} = this.state;
-    return (
-      <View style={{flex: 1}}>
-        <Image
-          style={{width: 120, height: 120, alignSelf: 'center', elevation: 4}}
-          source={{uri: `${global.MyVar}/uploads/services/${serviceImages}`}}
-        />
-        <Text style={{alignSelf: 'center', fontWeight: 'bold', fontSize: 20}}>
-          {this.state.names}
-        </Text>
-        <Text style={{marginTop: '5%', marginLeft: '5%'}}>
-          <Text style={{fontWeight: 'bold', fontSize: 17}}>Description:</Text>{' '}
-          {this.state.desc}{' '}
-        </Text>
-        <TextInput
-          placeholder="Remarks"
-          style={styles.textInput}
-          onChangeText={(text) => {
-            this.setState({bookingTime: text});
-          }}
-        />
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+  }
 
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <SpinnerButton
-            spinnerType="UIActivityIndicator"
-            buttonStyle={styles.buttonStyle}
-            isLoading={this.state.defaultLoading}
-            onPress={() => {
-              this.setState({defaultLoading: true});
-              this.CheckTextInput(addId);
-            }}>
-            <Text style={styles.textSign}>Place Order</Text>
-          </SpinnerButton>
-        </View>
-        <View style={{flex: 1, marginTop: 25}}>
-          <Text
-            style={{
-              color: 'red',
-              fontSize: 13,
-              marginLeft: 13,
-              fontWeight: 'bold',
-            }}>
-            SELECTED ADDRESS
+  render() {
+    const { addId, street, city, state, pinCode } = this.props.route.params;
+    const { serviceImages, isLoading } = this.state;
+    return isLoading === true ? (
+      <ActivityIndicator
+        style={{ flex: 1 }}
+        animating={true}
+        size="large"
+        color="#0000ff"
+      />
+    ) : (
+        <View style={{ flex: 1 }}>
+          <Image
+            style={{ width: 120, height: 120, alignSelf: 'center', elevation: 4 }}
+            source={{ uri: `${global.MyVar}/uploads/services/${serviceImages}` }}
+          />
+          <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 20 }}>
+            {this.state.names}
           </Text>
-          <ImageBackground
-            style={{
-              marginLeft: 5,
-              marginRight: 5,
-              padding: 5,
-              backgroundColor: 'white',
-              borderWidth: 4,
-              borderColor: 'white',
-              elevation: 4,
-              height: 150,
-            }}>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <View style={{flex: 1, flexDirection: 'column'}}>
-                <Text>{street},</Text>
-                <Text>{city},</Text>
-                <Text>{pinCode},</Text>
-                <Text>{state},</Text>
-              </View>
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <Icon
-                  style={{}}
-                  size={20}
-                  reverse
-                  name="settings-backup-restore"
-                  type="MaterialIcons"
-                  color="green"
-                  onPress={() => {
-                    this.props.navigation.navigate('Address');
-                  }}
-                />
-                <Text style={{color: 'red', marginTop: 0, fontSize: 10}}>
-                  Change
+          <Text style={{ marginTop: '5%', marginLeft: '5%' }}>
+            <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Description:</Text>{' '}
+            {this.state.desc}{' '}
+          </Text>
+          <TextInput
+            placeholder="Remarks"
+            style={styles.textInput}
+            onChangeText={(text) => {
+              this.setState({ bookingTime: text });
+            }}
+          />
+
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <SpinnerButton
+              spinnerType="UIActivityIndicator"
+              buttonStyle={styles.buttonStyle}
+              isLoading={this.state.defaultLoading}
+              onPress={() => {
+                this.setState({ defaultLoading: true });
+                this.CheckTextInput(addId);
+              }}>
+              <Text style={styles.textSign}>Place Order</Text>
+            </SpinnerButton>
+          </View>
+          <View style={{ flex: 1, marginTop: 25 }}>
+            <Text
+              style={{
+                color: 'red',
+                fontSize: 13,
+                marginLeft: 13,
+                fontWeight: 'bold',
+              }}>
+              SELECTED ADDRESS
+          </Text>
+            <ImageBackground
+              style={{
+                marginLeft: 5,
+                marginRight: 5,
+                padding: 5,
+                backgroundColor: 'white',
+                borderWidth: 4,
+                borderColor: 'white',
+                elevation: 4,
+                height: 150,
+              }}>
+              <View style={{ flex: 1, flexDirection: 'row' }}>
+                <View style={{ flex: 1, flexDirection: 'column' }}>
+                  <Text>{street},</Text>
+                  <Text>{city},</Text>
+                  <Text>{pinCode},</Text>
+                  <Text>{state},</Text>
+                </View>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                  <Icon
+                    style={{}}
+                    size={20}
+                    reverse
+                    name="settings-backup-restore"
+                    type="MaterialIcons"
+                    color="green"
+                    onPress={() => {
+                      this.props.navigation.navigate('Address');
+                    }}
+                  />
+                  <Text style={{ color: 'red', marginTop: 0, fontSize: 10 }}>
+                    Change
                 </Text>
-                <Text style={{color: 'red', fontSize: 10}}>ADDRESS</Text>
+                  <Text style={{ color: 'red', fontSize: 10 }}>ADDRESS</Text>
+                </View>
               </View>
-            </View>
-          </ImageBackground>
+            </ImageBackground>
+          </View>
         </View>
-      </View>
-    );
+      );
   }
 }
 

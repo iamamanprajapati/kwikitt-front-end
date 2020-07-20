@@ -5,15 +5,27 @@ import {
   Text,
   View,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Animation from 'lottie-react-native';
 import anim from '../assets/soda_loader.json';
 
 export class BookOrder extends Component {
+
+  backAction = async () => {
+    this.props.navigation.navigate('Category')
+  };
+
   componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.backAction);
     this.animation.play();
   }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+  }
+
   render() {
     return (
       <View style={styles.container}>

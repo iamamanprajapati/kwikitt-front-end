@@ -18,7 +18,7 @@ import ReviewOrder from '../Review/ReviewOrder'
 import Review from '../Review/Review'
 import Help from '../Review/Help'
 
-export class HelloOrders extends Component {
+export class Bookings extends Component {
   constructor(props) {
     super(props);
     global.MyVar;
@@ -63,9 +63,9 @@ export class HelloOrders extends Component {
     }
   }
 
-  RenderReview = (id, bookingStatus, name, time, image,address,feedback) => {
+  RenderReview = (id, bookingStatus, name, time, image,address,feedback,usersByPartner) => {
     this.StoreOrderId(id);
-    this.props.navigation.navigate('ReviewOrder', { id: id, bookingStatus: bookingStatus, name: name, time: time, image: image,address:address,feedback:feedback })
+    this.props.navigation.navigate('ReviewOrder', { id: id, bookingStatus: bookingStatus, name: name, time: time, image: image,address:address,feedback:feedback,usersByPartner:usersByPartner })
   }
 
   getData = async () => {
@@ -140,7 +140,7 @@ export class HelloOrders extends Component {
                       elevation: 4,
                       height: 150,
                     }}>
-                    <TouchableNativeFeedback onPress={() => this.RenderReview(list.id, list.bookingStatus, list.service.name, list.bookingDate / 1000, list.service.serviceImage,list.address,list.feedback)} >
+                    <TouchableNativeFeedback onPress={() => this.RenderReview(list.id, list.bookingStatus, list.service.name, list.bookingDate / 1000, list.service.serviceImage,list.address,list.feedback,list.usersByPartner)} >
                       <View style={{ flex: 1, flexDirection: 'column' }}>
                         <View style={{ flex: 3, flexDirection: 'row' }}>
                           <View style={{ flex: 2 }}>
@@ -218,7 +218,7 @@ export class MyOrders extends Component {
       <Stack.Navigator screenOptions={{
         headerShown: false,
       }}>
-        <Stack.Screen name="MyOrders" component={HelloOrders} />
+        <Stack.Screen name="MyOrders" component={Bookings} />
         <Stack.Screen name="ReviewOrder" component={ReviewOrder} />
         <Stack.Screen name="Review" component={Review} />
         <Stack.Screen name="Help" component={Help} />

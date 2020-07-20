@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, BackHandler, Image, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, BackHandler, Image, ScrollView, ActivityIndicator, TouchableOpacity, TouchableNativeFeedback } from 'react-native';
 import StepIndicator from 'react-native-step-indicator';
 import StarRating from 'react-native-star-rating';
 import Timestamp from 'react-timestamp';
 import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage';
 import Header from '../Header';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
-
-const labels = ["Booked", "Accepted", "Assigned to Partner", "In Progress", "Confirm"];
+const labels = ["Booked", "Accepted", "Assigned to Partner", "In Progress", "Done"];
 const rejectLabels = ["Booked", "Rejected"];
 
 
@@ -82,7 +82,7 @@ class ReviewOrder extends Component {
       rating: rating,
       review: this.state.review
     }).then(response => {
-      console(response.data.data.rating)
+      console.log(response.data.data.rating)
     })
   }
 
@@ -147,24 +147,77 @@ class ReviewOrder extends Component {
     }
   }
 
-  getReview =  (review) => {
+  getReview = (review) => {
     if (review === "") {
-      return(
-      <View><Text> </Text></View>
-      )}
+      return (
+        <View style={{ height: 0 }}><Text> </Text></View>
+      )
+    }
     else {
-      return(
-      <View>
-        <Text style={{ marginTop: 5, marginLeft: 10, fontSize: 15, fontWeight: 'bold' }}>Your Review</Text>
-        <Text style={{ marginLeft: 10,marginBottom:10 }}>{review}</Text>
-        <View
-          style={{
-            borderBottomColor: '#d6c4c3',
-            borderBottomWidth: 1,
-          }}
-        />
-      </View>
-      )}
+      return (
+        <View>
+          <Text style={{ marginTop: 5, marginLeft: 10, fontSize: 15, fontWeight: 'bold' }}>Your Review</Text>
+          <Text style={{ marginLeft: 10, marginBottom: 10 }}>{review}</Text>
+          <View
+            style={{
+              borderBottomColor: '#d6c4c3',
+              borderBottomWidth: 1,
+            }}
+          />
+        </View>
+      )
+    }
+  }
+
+  changeTextByEditReview = (review, id, rating) => {
+    if (review === "") {
+      return (
+        <Text onPress={() => this.props.navigation.navigate('Review', { review: review, id: id, rating: rating })} style={{ alignSelf: 'flex-end', marginRight: 30, color: 'blue', fontSize: 12 }}>Write a Review</Text>
+      )
+    }
+    else {
+      return (
+        <Text onPress={() => this.props.navigation.navigate('Review', { review: review, id: id, rating: rating })} style={{ alignSelf: 'flex-end', marginRight: 30, color: 'blue', fontSize: 12 }}>Edit Review</Text>
+      )
+    }
+  }
+
+  getRating = (id, review, starCount, bookingStatus) => {
+    if (bookingStatus === "DONE") {
+      return (
+        <View>
+          <View style={{ height: 50, flexDirection: 'row' }}>
+            <View style={{ flex: .4, marginTop: 12, marginLeft: 10 }}>
+              <StarRating
+                disabled={false}
+                maxStars={5}
+                rating={starCount}
+                selectedStar={(rating) => this.onStarRatingPress(rating, id)}
+                fullStarColor="red"
+                animation="rotate"
+                starSize={25}
+              />
+            </View>
+            <View style={{ flex: .6, marginTop: 15 }}>
+              {this.changeTextByEditReview(review, id, starCount)}
+            </View>
+          </View>
+          <View
+            style={{
+              borderBottomColor: '#d6c4c3',
+              borderBottomWidth: 1,
+            }}
+          />
+        </View>
+      )
+    }
+    else {
+      return (
+        <View>
+
+        </View>
+      )
+    }
   }
 
   StepIndicator = (bookingStatus) => {
@@ -196,8 +249,50 @@ class ReviewOrder extends Component {
     }
   }
 
+  getContactOfPartner = (bookingStatus, usersByPartner) => {
+    if (bookingStatus === "BOOKED" || bookingStatus === "ACCEPTED" || bookingStatus === "CANCEL" || bookingStatus === "REJECTED" || bookingStatus === "DONE") {
+      return (
+        <View style={{ height: 0 }}>
+        </View>
+      )
+    }
+    else {
+      if (usersByPartner !== null) {
+        return (
+          <View>
+            <View style={{ flexDirection: 'row', flex: 1 }}>
+              <View style={{ flexDirection: 'column', flex: .6 }}>
+                <Text style={{ fontWeight: 'bold', marginTop: 5, marginLeft: 10 }}>Partner</Text>
+                <View style={{ justifyContent: 'center' }} ><Text style={{ marginLeft: 10, fontSize: 12 }}>{usersByPartner.name}</Text></View>
+              </View>
+              <View style={{ flex: .4, justifyContent: 'center' }}>
+                <MaterialIcons
+                  style={{ marginLeft: 90, marginTop: 5 }}
+                  size={20}
+                  reverse
+                  name='call'
+                  color='green'
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                borderBottomColor: '#d6c4c3',
+                borderBottomWidth: 1,
+                marginTop: 5
+              }}
+            />
+          </View>
+        )
+      }
+      return (
+        <View style={{ height: 0 }}></View>
+      )
+    }
+  }
+
   render() {
-    const { id, bookingStatus, name, time, image, address, feedback } = this.props.route.params
+    const { id, bookingStatus, name, time, image, address, feedback, usersByPartner } = this.props.route.params
     const { isLoading } = this.state
     return isLoading === true ? (
 
@@ -207,10 +302,49 @@ class ReviewOrder extends Component {
         size="large"
         color="#0000ff"
       />) : (
-        <ScrollView style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
           <Header />
-          <View style={{ height: 30 }}>
-            <Text style={{ color: '#8c8281', marginTop: 10, marginLeft: 10 }}>Order ID - {id}</Text>
+          <ScrollView style={{ flex: 1 }}>
+            <View style={{ height: 30 }}>
+              <Text style={{ color: '#8c8281', marginTop: 10, marginLeft: 10 }}>Order ID - {id}</Text>
+              <View
+                style={{
+                  borderBottomColor: '#d6c4c3',
+                  borderBottomWidth: 1,
+                  marginTop: 10
+                }}
+              />
+            </View>
+            <View style={{ flexDirection: 'row', height: 130 }}>
+              <View style={{ flex: .7, marginTop: 10 }}>
+                <Text style={{ marginLeft: 10, marginTop: 20, fontWeight: 'bold', fontSize: 15 }}>{name}</Text>
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    marginTop: 5,
+                    fontSize: 10,
+                    color: 'green',
+                  }}>
+                  {'\u2B24'}
+                  <Text style={{ fontSize: 12 }}>
+                    <Timestamp
+                      time={time}
+                      format="full"
+                      component={Text}
+                    />
+                  </Text>
+                </Text>
+
+              </View>
+              <View style={{ flex: .3 }}>
+                <Image
+                  style={{ height: 100, width: 100, alignSelf: 'center', marginTop: 25 }}
+                  source={{
+                    uri: `${global.MyVar}/uploads/services/${image}`,
+                  }}
+                />
+              </View>
+            </View>
             <View
               style={{
                 borderBottomColor: '#d6c4c3',
@@ -218,103 +352,48 @@ class ReviewOrder extends Component {
                 marginTop: 10
               }}
             />
-          </View>
-          <View style={{ flexDirection: 'row', height: 130 }}>
-            <View style={{ flex: .7, marginTop: 10 }}>
-              <Text style={{ marginLeft: 10, marginTop: 20, fontWeight: 'bold', fontSize: 15 }}>{name}</Text>
-              <Text
-                style={{
-                  marginLeft: 10,
-                  marginTop: 5,
-                  fontSize: 10,
-                  color: 'green',
-                }}>
-                {'\u2B24'}
-                <Text style={{ fontSize: 12 }}>
-                  <Timestamp
-                    time={time}
-                    format="full"
-                    component={Text}
-                  />
-                </Text>
-              </Text>
+            <View >
+              <Text style={{ marginTop: 5, marginLeft: 10, fontSize: 15, fontWeight: 'bold' }}>Address</Text>
+              <Text style={{ marginTop: 5, marginLeft: 10, fontSize: 12, }}>{address.street} , {address.city} , {address.state} , {address.pinCode}</Text>
+            </View>
+            <View
+              style={{
+                borderBottomColor: '#d6c4c3',
+                borderBottomWidth: 1,
+                marginTop: 10
+              }}
+            />
+            {
+              this.StepIndicator(bookingStatus)
+            }
+            <View
+              style={{
+                borderBottomColor: '#d6c4c3',
+                borderBottomWidth: 1,
+                marginTop: 10
+              }}
+            />
+            {
+              this.getContactOfPartner(bookingStatus, usersByPartner)
+            }
 
+            {
+              this.getRating(id, this.state.review, this.state.starCount, bookingStatus)
+            }
+            {this.getReview(this.state.review)}
+            <View style={{ height: 50, justifyContent: 'center' }}>
+              <Text onPress={() => this.props.navigation.navigate('Help')} style={{ fontSize: 13, alignSelf: 'center', fontWeight: 'bold' }}>NEED HELP ?</Text>
             </View>
-            <View style={{ flex: .3 }}>
-              <Image
-                style={{ height: 100, width: 100, alignSelf: 'center', marginTop: 25 }}
-                source={{
-                  uri: `${global.MyVar}/uploads/services/${image}`,
-                }}
-              />
-            </View>
-          </View>
-          <View
-            style={{
-              borderBottomColor: '#d6c4c3',
-              borderBottomWidth: 1,
-              marginTop: 10
-            }}
-          />
-          <View >
-            <Text style={{ marginTop: 5, marginLeft: 10, fontSize: 15, fontWeight: 'bold' }}>Address</Text>
-            <Text style={{ marginTop: 5, marginLeft: 10, fontSize: 12, }}>{address.street} , {address.city} , {address.state} , {address.pinCode}</Text>
-          </View>
-          <View
-            style={{
-              borderBottomColor: '#d6c4c3',
-              borderBottomWidth: 1,
-              marginTop: 10
-            }}
-          />
-          {
-            this.StepIndicator(bookingStatus)
-          }
-
-          <View
-            style={{
-              borderBottomColor: '#d6c4c3',
-              borderBottomWidth: 1,
-              marginTop: 10
-            }}
-          />
-          <View style={{ height: 50, flexDirection: 'row' }}>
-            <View style={{ flex: .4, marginTop: 12, marginLeft: 10 }}>
-              <StarRating
-                disabled={false}
-                maxStars={5}
-                rating={this.state.starCount}
-                selectedStar={(rating) => this.onStarRatingPress(rating, id)}
-                fullStarColor="red"
-                animation="rotate"
-                starSize={25}
-              />
-            </View>
-            <View style={{ flex: .6, marginTop: 15 }}>
-              <Text onPress={() => this.props.navigation.navigate('Review', { id: id, rating: this.state.starCount })} style={{ alignSelf: 'flex-end', marginRight: 30, color: 'blue', fontSize: 12 }}>Write a Review</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              borderBottomColor: '#d6c4c3',
-              borderBottomWidth: 1,
-            }}
-          />
-          <View style={{ height: 50, justifyContent: 'center' }}>
-            <Text onPress={() => this.props.navigation.navigate('Help')} style={{ fontSize: 13, alignSelf: 'center', fontWeight: 'bold' }}>NEED HELP ?</Text>
-          </View>
-          <View
-            style={{
-              borderBottomColor: '#d6c4c3',
-              borderBottomWidth: 1,
-            }}
-          />
-          {this.getReview(this.state.review)}
-
-        </ScrollView>
+            <View
+              style={{
+                borderBottomColor: '#d6c4c3',
+                borderBottomWidth: 1,
+              }}
+            />
+          </ScrollView>
+        </View>
       )
   }
 }
-
 
 export default ReviewOrder;

@@ -11,6 +11,7 @@ import {
   Dimensions,
   TouchableHighlight,
   ActivityIndicator,
+  BackHandler
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
@@ -91,6 +92,7 @@ export class Address extends Component {
 
   refreshComponent = () => {
     this.getData();
+    BackHandler.addEventListener("hardwareBackPress", this.backAction);
   };
 
   componentDidMount() {
@@ -100,8 +102,21 @@ export class Address extends Component {
   }
 
   componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.backAction);
     this._unsubscribe();
+    
   }
+
+
+
+  backAction = async () => {
+    this.props.navigation.navigate('Services');
+  };
+
+
+
+
+
   render() {
     const {showAlert} = this.state;
     const {data} = this.state;

@@ -8,7 +8,6 @@ import {
   StatusBar,
   Linking,
   Alert,
-  Button,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -20,7 +19,7 @@ class SplashScreen extends Component {
   constructor() {
     super();
     console.warn('run');
-    global.MyVar = 'http://a55d89b3bcfd.ngrok.io';
+    global.MyVar = 'http://1e21c0bb3d27.ngrok.io';
     this.state = {
       userId: null,
       isLoading: true,

@@ -6,7 +6,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 import {PartnerScreen} from './TabScreen/PartnerScreen';
 import {ProfileScreen} from './TabScreen/ProfileScreen';
 import {MyOrders} from './TabScreen/MyOrders';
-import {Home} from './Home';
+import {Category} from './Category';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -18,8 +18,8 @@ export class TabNavigation extends Component {
         activeColor="white"
         style={{backgroundColor: '#009387'}}>
         <Tab.Screen
-          name="Home"
-          component={Home}
+          name="Category"
+          component={Category}
           options={{
             tabBarLabel: 'Home',
             tabBarColor: '#009387',

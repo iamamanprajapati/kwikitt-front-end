@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {View, Text, StyleSheet, Platform, StatusBar, Alert} from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, StyleSheet, Platform, StatusBar, Alert } from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import * as Animatable from 'react-native-animatable';
 import axios from 'axios';
@@ -19,21 +19,22 @@ class OtpVerificationScreen extends Component {
     };
   }
 
-  onSubmit = async (value) => {
+  onSubmit = async (value,r) => {
     try {
       await AsyncStorage.setItem('token', JSON.stringify(value));
+      await AsyncStorage.setItem('role', r);
     } catch (e) {
       console.warn(e);
     }
   };
 
-  checkService = (id,r)=>{
-      axios.get(`${global.MyVar}/service-partner/list/service/${id}`)
-      .then(response=>{
-        if(response.data.data.length===0){
-          this.props.navigation.navigate('LoginServiceScreen',{userId:id,r:r});
+  checkService = (id, r) => {
+    axios.get(`${global.MyVar}/service-partner/list/service/${id}`)
+      .then(response => {
+        if (response.data.data.length === 0) {
+          this.props.navigation.navigate('LoginServiceScreen', { userId: id, r: r });
         }
-        else{
+        else {
           this.props.navigation.navigate('HomeScreen');
         }
       })
@@ -57,7 +58,7 @@ class OtpVerificationScreen extends Component {
 
   CheckTextInput = (data) => {
     if (this.state.otp.length >= '4') {
-      this.setState({defaultLoading: true});
+      this.setState({ defaultLoading: true });
       axios
         .post(`${global.MyVar}/user/verify/otp/finish`, {
           otp: this.state.otp,
@@ -65,9 +66,9 @@ class OtpVerificationScreen extends Component {
         })
         .then((response) => {
           messaging().getToken().then(
-            token=>{
+            token => {
               console.log(token)
-              axios.post(`${global.MyVar}/user/${response.data.data.id}/fcm/token`, {token:token})
+              axios.post(`${global.MyVar}/user/${response.data.data.id}/fcm/token`, { token: token })
             }
           )
           if (!response.data.data.isRegistered) {
@@ -75,13 +76,14 @@ class OtpVerificationScreen extends Component {
               data1: data,
             });
           } else {
-                this.onSubmit(response.data.data.id);
-                    if(response.data.data.roles[1]){
-                      this.checkService(response.data.data.id,response.data.data.roles[1]);
-                    }
-                    else{
-                      this.props.navigation.navigate('HomeScreen');
-                    }
+            
+            if (response.data.data.roles[1]) {
+              this.onSubmit(response.data.data.id,response.data.data.roles[1]);
+              this.checkService(response.data.data.id, response.data.data.roles[1]);
+            }
+            else {
+              this.props.navigation.navigate('HomeScreen');
+            }
           }
         })
         .catch((error) => {
@@ -105,8 +107,8 @@ class OtpVerificationScreen extends Component {
   };
 
   render() {
-    const {showAlert} = this.state;
-    const {data} = this.props.route.params;
+    const { showAlert } = this.state;
+    const { data } = this.props.route.params;
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="#009386" />
@@ -119,10 +121,10 @@ class OtpVerificationScreen extends Component {
           style={styles.footer}>
           <View style={styles.action}>
             <OTPInputView
-              style={{width: '80%', height: 200}}
+              style={{ width: '80%', height: 200 }}
               pinCount={4}
               onCodeChanged={(text) => {
-                this.setState({otp: text});
+                this.setState({ otp: text });
               }}
               autoFocusOnLoad
               codeInputFieldStyle={styles.underlineStyleBase}
