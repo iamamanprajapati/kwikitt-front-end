@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
-import { View, Text, BackHandler, Image, ScrollView, ActivityIndicator, TouchableOpacity, TouchableNativeFeedback } from 'react-native';
+import { View, Text, BackHandler, Image, ScrollView, ActivityIndicator, Linking, TouchableOpacity, Dimensions } from 'react-native';
 import StepIndicator from 'react-native-step-indicator';
 import StarRating from 'react-native-star-rating';
 import Timestamp from 'react-timestamp';
 import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage';
 import Header from '../Header';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { Icon } from 'react-native-elements';
+
 
 const labels = ["Booked", "Accepted", "Assigned to Partner", "In Progress", "Done"];
 const rejectLabels = ["Booked", "Rejected"];
+
+const Width = Dimensions.get('window').width;
+const Width1 = (Width) - 50
+const Width2 = (Width / 2) - 40
 
 
 const customStyles = {
@@ -249,6 +254,20 @@ class ReviewOrder extends Component {
     }
   }
 
+  mobileCall = (mobile) => {
+
+    let phoneNumber = '';
+
+    if (Platform.OS === 'android') {
+      phoneNumber = `tel:${mobile}`;
+    }
+    else {
+      phoneNumber = `telprompt:${mobile}`
+    }
+
+    Linking.openURL(phoneNumber);
+  };
+
   getContactOfPartner = (bookingStatus, usersByPartner) => {
     if (bookingStatus === "BOOKED" || bookingStatus === "ACCEPTED" || bookingStatus === "CANCEL" || bookingStatus === "REJECTED" || bookingStatus === "DONE") {
       return (
@@ -261,17 +280,19 @@ class ReviewOrder extends Component {
         return (
           <View>
             <View style={{ flexDirection: 'row', flex: 1 }}>
-              <View style={{ flexDirection: 'column', flex: .6 }}>
+              <View style={{ flexDirection: 'column', flex: .75 }}>
                 <Text style={{ fontWeight: 'bold', marginTop: 5, marginLeft: 10 }}>Partner</Text>
                 <View style={{ justifyContent: 'center' }} ><Text style={{ marginLeft: 10, fontSize: 12 }}>{usersByPartner.name}</Text></View>
               </View>
-              <View style={{ flex: .4, justifyContent: 'center' }}>
-                <MaterialIcons
-                  style={{ marginLeft: 90, marginTop: 5 }}
-                  size={20}
+              <View style={{ flex: .25, justifyContent: 'center', alignItems: 'center' }}>
+                <Icon
+                  size={15}
+                  style={{ alignSelf: 'center' }}
                   reverse
-                  name='call'
-                  color='green'
+                  name="call"
+                  type="ionicons"
+                  color="green"
+                  onPress={() => this.mobileCall(usersByPartner.mobile)}
                 />
               </View>
             </View>
@@ -279,7 +300,7 @@ class ReviewOrder extends Component {
               style={{
                 borderBottomColor: '#d6c4c3',
                 borderBottomWidth: 1,
-                marginTop: 5
+                marginTop: 0
               }}
             />
           </View>
@@ -289,6 +310,35 @@ class ReviewOrder extends Component {
         <View style={{ height: 0 }}></View>
       )
     }
+  }
+
+  changeStatus = (id, status) => {
+    this.setState({
+      isLoading: true
+    })
+    axios.post(`${global.MyVar}/booking/update/status/${id}`,
+      status
+    )
+      .then(response => {
+        this.refreshComponent();
+      })
+  }
+
+  CancelOrder = (bookingStatus, id) => {
+    if (bookingStatus === "DONE" || bookingStatus === "CANCEL" || bookingStatus === "REJECT") {
+      return (
+        <View></View>
+      )
+    }
+    return (
+      <View style={{ flexDirection: 'row', flex: 1, marginTop: 20 }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <TouchableOpacity
+            onPress={() => this.changeStatus(id, "CANCEL")}
+            style={{ alignItems: 'center', justifyContent: 'center', borderWidth: 1, height: 45, width: Width1, backgroundColor: 'green', borderRadius: 5, borderColor: 'white' }}><Text style={{ color: 'white' }}>Cancel Order</Text></TouchableOpacity>
+        </View>
+      </View>
+    )
   }
 
   render() {
@@ -390,6 +440,9 @@ class ReviewOrder extends Component {
                 borderBottomWidth: 1,
               }}
             />
+            {
+              this.CancelOrder(bookingStatus, id)
+            }
           </ScrollView>
         </View>
       )

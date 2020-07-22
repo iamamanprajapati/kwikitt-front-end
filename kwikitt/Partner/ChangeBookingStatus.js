@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
-import { View, Text, BackHandler, Image, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, BackHandler, Image, ScrollView, ActivityIndicator, Dimensions, Linking } from 'react-native';
 import StarRating from 'react-native-star-rating';
 import Timestamp from 'react-timestamp';
 import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage';
 import Header from '../Header';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Icon } from 'react-native-elements';
 
 const labels = ["Booked", "Accepted", "Assigned to Partner", "In Progress", "Done"];
 const rejectLabels = ["Booked", "Rejected"];
+
+const Width = Dimensions.get('window').width;
+const Width1 = (Width) - 50
+const Width2 = (Width / 2) - 40
+
+const inprogress = "IN_PROGRESS"
 
 class ChangeBookingStatus extends Component {
   constructor(props) {
@@ -20,7 +26,7 @@ class ChangeBookingStatus extends Component {
       starCount: 0,
       userId: null,
       review: '',
-      isLoading: true
+      isLoading: true,
     };
   }
 
@@ -74,6 +80,20 @@ class ChangeBookingStatus extends Component {
     } catch (e) { }
   }
 
+  mobileCall = (mobile) => {
+
+    let phoneNumber = '';
+
+    if (Platform.OS === 'android') {
+      phoneNumber = `tel:${mobile}`;
+    }
+    else {
+      phoneNumber = `telprompt:${mobile}`
+    }
+
+    Linking.openURL(phoneNumber);
+  };
+
   onChange = (value) => {
     switch (value) {
       case "BOOKED": return 1;
@@ -119,7 +139,6 @@ class ChangeBookingStatus extends Component {
                     maxStars={5}
                     rating={feedback.rating}
                     fullStarColor="red"
-                    animation="rotate"
                     starSize={25}
                   />
                 </View>
@@ -139,29 +158,29 @@ class ChangeBookingStatus extends Component {
           )
         }
       }
-        return (
-          <View>
-            <View style={{ height: 50, flexDirection: 'row' }}>
-              <View style={{ flex: .4, marginTop: 12, marginLeft: 10 }}>
-                <Text>Not Yet Rated</Text>
-              </View>
+      return (
+        <View>
+          <View style={{ height: 50, flexDirection: 'row' }}>
+            <View style={{ flex: .4, marginTop: 12, marginLeft: 10 }}>
+              <Text>Not Yet Rated</Text>
             </View>
-            <View
-              style={{
-                borderBottomColor: '#d6c4c3',
-                borderBottomWidth: 1,
-              }}
-            />
           </View>
-        )
+          <View
+            style={{
+              borderBottomColor: '#d6c4c3',
+              borderBottomWidth: 1,
+            }}
+          />
+        </View>
+      )
     }
     return (
       <View></View>
     )
   }
 
-  getContactOfPartner = (bookingStatus, userId) => {
-    if (bookingStatus === "BOOKED" || bookingStatus === "ACCEPTED" || bookingStatus === "CANCEL" || bookingStatus === "REJECTED" || bookingStatus==="DONE") {
+  getContactOfPartner = (bookingStatus, usersByCustomer) => {
+    if (bookingStatus === "BOOKED" || bookingStatus === "ACCEPTED" || bookingStatus === "CANCEL" || bookingStatus === "REJECTED" || bookingStatus === "DONE") {
       return (
         <View style={{ height: 0 }}>
         </View>
@@ -170,18 +189,20 @@ class ChangeBookingStatus extends Component {
     else {
       return (
         <View>
-          <View style={{  flexDirection: 'row', flex: 1 }}>
-            <View style={{flexDirection:'column',flex: .6}}>
-            <Text style={{fontWeight:'bold',marginTop:5,marginLeft:10}}>User</Text>
-            <View style={{ justifyContent: 'center' }} ><Text style={{ marginLeft: 10 }}>{userId}</Text></View>
+          <View style={{ flexDirection: 'row', flex: 1 }}>
+            <View style={{ flexDirection: 'column', flex: .75 }}>
+              <Text style={{ fontWeight: 'bold', marginTop: 5, marginLeft: 10 }}>User</Text>
+              <View style={{ justifyContent: 'center' }} ><Text style={{ marginLeft: 10 }}>{usersByCustomer.name}</Text></View>
             </View>
-            <View style={{ flex: .4,justifyContent:'center' }}>
-              <MaterialIcons
-                style={{ marginLeft: 90,marginTop:5 }}
-                size={20}
+            <View style={{ flex: .25, justifyContent: 'center', alignItems: 'center' }}>
+              <Icon
+                size={15}
+                style={{ alignSelf: 'center' }}
                 reverse
-                name='call'
-                color='green'
+                name="call"
+                type="ionicons"
+                color="green"
+                onPress={() => this.mobileCall(usersByCustomer.mobile)}
               />
             </View>
           </View>
@@ -189,7 +210,7 @@ class ChangeBookingStatus extends Component {
             style={{
               borderBottomColor: '#d6c4c3',
               borderBottomWidth: 1,
-              marginTop: 5
+              marginTop: 0
             }}
           />
         </View>
@@ -197,9 +218,52 @@ class ChangeBookingStatus extends Component {
     }
   }
 
+  changeStatus = (id, status) => {
+    this.setState({
+      isLoading: true
+    })
+    axios.post(`${global.MyVar}/booking/update/status/${id}`, {
+      status,
+    }
+    )
+      .then(response => {
+        this.refreshComponent();
+      })
+  }
+
+  RejectOrInprogress = (bookingStatus, id) => {
+    if (bookingStatus === "ASSIGNED_TO_PARTNER") {
+      return (
+        <View style={{ flexDirection: 'row', flex: 1, marginTop: 20 }}>
+          <View style={{ flex: .5, justifyContent: 'center', alignItems: 'center' }}>
+            <TouchableOpacity
+              onPress={() => this.changeStatus(id, "IN_PROGRESS")}
+              style={{ alignItems: 'center', justifyContent: 'center', borderWidth: 1, height: 45, width: Width2, backgroundColor: 'green', borderRadius: 5, borderColor: 'white' }}><Text style={{ color: 'white' }}>In Progress</Text></TouchableOpacity>
+          </View>
+          <View style={{ flex: .5, justifyContent: 'center', alignItems: 'center' }}>
+            <TouchableOpacity
+              onPress={() => this.changeStatus(id, "REJECT")}
+              style={{ alignItems: 'center', justifyContent: 'center', borderWidth: 1, height: 45, width: Width2, backgroundColor: '#ff3333', borderRadius: 5, borderColor: 'white' }}><Text style={{ color: 'white' }}>Reject</Text></TouchableOpacity>
+          </View>
+        </View>
+      )
+    }
+    else if (bookingStatus === "IN_PROGRESS") {
+      return (
+        <View style={{ flexDirection: 'row', flex: 1, marginTop: 20 }}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <TouchableOpacity
+              onPress={() => this.changeStatus(id, "DONE")}
+              style={{ alignItems: 'center', justifyContent: 'center', borderWidth: 1, height: 45, width: Width1, backgroundColor: 'green', borderRadius: 5, borderColor: 'white' }}><Text style={{ color: 'white' }}>Done</Text></TouchableOpacity>
+          </View>
+        </View>
+      )
+    }
+  }
+
 
   render() {
-    const { id, bookingStatus, name, time, image, address, feedback, userId } = this.props.route.params
+    const { id, bookingStatus, name, time, image, address, feedback, usersByCustomer } = this.props.route.params
     const { isLoading } = this.state
     return isLoading === true ? (
 
@@ -270,7 +334,7 @@ class ChangeBookingStatus extends Component {
             }}
           />
           {
-            this.getContactOfPartner(bookingStatus, userId)
+            this.getContactOfPartner(bookingStatus, usersByCustomer)
           }
 
           {
@@ -286,6 +350,9 @@ class ChangeBookingStatus extends Component {
               borderBottomWidth: 1,
             }}
           />
+          {
+            this.RejectOrInprogress(bookingStatus, id)
+          }
         </ScrollView>
       )
   }

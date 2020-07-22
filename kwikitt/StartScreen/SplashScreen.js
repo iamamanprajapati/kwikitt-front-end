@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -19,7 +19,7 @@ class SplashScreen extends Component {
   constructor() {
     super();
     console.warn('run');
-    global.MyVar = 'http://1e21c0bb3d27.ngrok.io';
+    global.MyVar = 'http://fb88b265d3e4.ngrok.io';
     this.state = {
       userId: null,
       isLoading: true,
@@ -30,10 +30,10 @@ class SplashScreen extends Component {
     try {
       const value = await AsyncStorage.getItem('token');
       const abcd = JSON.parse(value);
-      this.setState({userId: abcd});
+      this.setState({ userId: abcd });
       if (this.state.userId != null) {
         this.props.navigation.navigate('HomeScreen');
-      }   
+      }
       axios
         .post(`${global.MyVar}/app-version/validate`, {
           platform: 'ANDROID',
@@ -45,7 +45,7 @@ class SplashScreen extends Component {
               'please update the app to use our services',
               '',
               [
-                {text: 'Yes', onPress: this.openURL},
+                { text: 'Yes', onPress: this.openURL },
               ],
               { cancelable: false }
             )
@@ -83,7 +83,7 @@ class SplashScreen extends Component {
           duration={3000}
           style={styles.footer}>
           <Text style={styles.title}>Join with Kwikitt</Text>
-          <View style={{alignItems: 'flex-end', marginTop: '15%'}}>
+          <View style={{ alignItems: 'flex-end', marginTop: '15%' }}>
             <TouchableOpacity
               onPress={
                 () => this.props.navigation.navigate('MobileVerificationScreen')
@@ -108,7 +108,7 @@ class SplashScreen extends Component {
 
 export default SplashScreen;
 
-const {height} = Dimensions.get('screen');
+const { height } = Dimensions.get('screen');
 const height_logo = height * 0.5;
 
 const styles = StyleSheet.create({

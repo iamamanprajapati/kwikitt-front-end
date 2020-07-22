@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -44,11 +44,11 @@ class ViewServices extends Component {
   };
 
   render() {
-    const {list} = this.props.route.params;
+    const { list } = this.props.route.params;
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <Header />
-        <ScrollView style={{flex: 1}}>
+        <ScrollView style={{ flex: 1 }}>
           {list.services.map((j) => (
             <ImageBackground
               style={{
@@ -64,20 +64,20 @@ class ViewServices extends Component {
                   this.onSubmit(j.id);
                 }}
                 background={TouchableNativeFeedback.Ripple('#bfbfbf')}>
-                <View key={j.name} style={{flex: 1, flexDirection: 'row'}}>
-                  <View key={j.name} style={{flex: 1.8}}>
-                    <View key={j.name} style={{flex: 2}}>
+                <View key={j.name} style={{ flex: 1, flexDirection: 'row' }}>
+                  <View key={j.name} style={{ flex: 1.8 }}>
+                    <View key={j.name} style={{ flex: 2 }}>
                       <Text
-                        style={{fontSize: 20, marginLeft: 10, marginTop: 10}}>
+                        style={{ fontSize: 20, marginLeft: 10, marginTop: 10 }}>
                         {j.name}
                       </Text>
                     </View>
                   </View>
                   <View
                     key={j.serviceImage}
-                    style={{flex: 1, justifyContent: 'center'}}>
+                    style={{ flex: 1, justifyContent: 'center' }}>
                     <Image
-                      style={{height: 100, width: 100}}
+                      style={{ height: 100, width: 100 }}
                       source={{
                         uri: `${global.MyVar}/uploads/services/${j.serviceImage}`,
                       }}

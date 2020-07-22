@@ -1,10 +1,10 @@
 import axios from 'axios';
-import {Component} from 'react';
+import { Component } from 'react';
 
 class ServiceApi extends Component {
   constructor(props) {
     super(props);
-    global.MyVar = 'http://1e21c0bb3d27.ngrok.io';
+    global.MyVar = 'http://fb88b265d3e4.ngrok.io';
   }
 
   retrieveAllCategory() {

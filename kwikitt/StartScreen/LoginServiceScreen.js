@@ -135,7 +135,7 @@ export class LoginServiceScreen extends Component {
     });
   }
 
-  onSubmit = async (value,r) => {
+  onSubmit = async (value, r) => {
     try {
       await AsyncStorage.setItem('token', JSON.stringify(value));
       await AsyncStorage.setItem('role', r);
@@ -144,28 +144,28 @@ export class LoginServiceScreen extends Component {
     }
   };
 
-  registration = (userId,r) => {
+  registration = (userId, r) => {
     this.setState({ defaultLoading: true })
     axios
       .post(`${global.MyVar}/service-partner/assign-service`, {
-        services:selectedArrayOBJ.getArray().map(item => item.value),
-        userId:userId,
+        services: selectedArrayOBJ.getArray().map(item => item.value),
+        userId: userId,
       })
       .then((response) => {
-        this.onSubmit(userId,r);
+        this.onSubmit(userId, r);
         this.props.navigation.navigate('HomeScreen');
       });
   }
 
 
-  getSelectedItems = (userId,r) => {
-      console.log(userId)
-      this.registration(userId,r);
-      console.log(selectedArrayOBJ.getArray().map(item => item.value));
+  getSelectedItems = (userId, r) => {
+    console.log(userId)
+    this.registration(userId, r);
+    console.log(selectedArrayOBJ.getArray().map(item => item.value));
   }
 
   render() {
-    const { userId,r } = this.props.route.params
+    const { userId, r } = this.props.route.params
     return (
       <View style={styles.MainContainer}>
         <Text style={{ fontSize: 20 }}>इनमे से आप कौन से कार्य कर सकते हैं ?</Text>
@@ -202,7 +202,7 @@ export class LoginServiceScreen extends Component {
             spinnerType="UIActivityIndicator"
             buttonStyle={styles.buttonStyle}
             isLoading={this.state.defaultLoading}
-            onPress={() => this.getSelectedItems(userId,r)}>
+            onPress={() => this.getSelectedItems(userId, r)}>
             <Text style={styles.textSign}>Sign-In</Text>
           </SpinnerButton>
         </View>

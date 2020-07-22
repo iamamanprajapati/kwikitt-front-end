@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {View, Text, Share, Alert} from 'react-native';
-import {Icon} from 'react-native-elements';
+import React, { Component } from 'react';
+import { View, Text, Share, Alert } from 'react-native';
+import { Icon } from 'react-native-elements';
 
 export class Header extends Component {
   onShare = async () => {
@@ -24,8 +24,8 @@ export class Header extends Component {
   };
   render() {
     return (
-      <View style={{backgroundColor: '#009387', flexDirection: 'row'}}>
-        <View style={{flex: 3.8, justifyContent: 'center'}}>
+      <View style={{ backgroundColor: '#009387', flexDirection: 'row' }}>
+        <View style={{ flex: 3.8, justifyContent: 'center' }}>
           <Text
             style={{
               fontWeight: 'bold',
@@ -38,7 +38,7 @@ export class Header extends Component {
             Kwikitt
           </Text>
         </View>
-        <View style={{flex: 1, justifyContent: 'center'}}>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
           <Icon
             size={30}
             name="share-2"

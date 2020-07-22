@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {View, Text, Image, ActivityIndicator, StyleSheet} from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, Image, ActivityIndicator, StyleSheet } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import SpinnerButton from 'react-native-spinner-button';
@@ -21,7 +21,7 @@ export class ProfileScreen extends Component {
     try {
       const value = await AsyncStorage.getItem('token');
       const abcd = JSON.parse(value);
-      this.setState({userId: abcd});
+      this.setState({ userId: abcd });
       axios
         .get(`${global.MyVar}/user/${this.state.userId}`)
         .then((response) => {
@@ -56,53 +56,53 @@ export class ProfileScreen extends Component {
   }
 
   render() {
-    const {isLoading} = this.state;
+    const { isLoading } = this.state;
     return isLoading === true ? (
-      <ActivityIndicator style={{flex: 1}} size="large" color="#009386" />
+      <ActivityIndicator style={{ flex: 1 }} size="large" color="#009386" />
     ) : (
-      <View style={{flex: 1, backgroundColor: '#009386', alignItems: 'center'}}>
-        <Image
-          style={{width: 120, height: 120, marginTop: 60}}
-          source={require('../profile.png')}
-        />
-        <Text
-          style={{
-            marginTop: 20,
-            fontWeight: 'bold',
-            fontSize: 25,
-            color: 'white',
-          }}>
-          {this.state.name}
-        </Text>
-        <Text
-          style={{
-            marginTop: 10,
-            fontWeight: '200',
-            color: 'white',
-          }}>
-          {' '}
-          {this.state.email}
-        </Text>
-        <Text
-          style={{
-            marginTop: 10,
-            fontWeight: '200',
-            color: 'white',
-          }}>
-          {this.state.mobile}
-        </Text>
-        <SpinnerButton
-          spinnerType="UIActivityIndicator"
-          buttonStyle={styles.buttonStyle}
-          isLoading={this.state.defaultLoading}
-          onPress={() => {
-            this.setState({defaultLoading: true});
-            this.CheckTextInput();
-          }}>
-          <Text style={styles.textSign}>Log Out</Text>
-        </SpinnerButton>
-      </View>
-    );
+        <View style={{ flex: 1, backgroundColor: '#009386', alignItems: 'center' }}>
+          <Image
+            style={{ width: 120, height: 120, marginTop: 60 }}
+            source={require('../profile.png')}
+          />
+          <Text
+            style={{
+              marginTop: 20,
+              fontWeight: 'bold',
+              fontSize: 25,
+              color: 'white',
+            }}>
+            {this.state.name}
+          </Text>
+          <Text
+            style={{
+              marginTop: 10,
+              fontWeight: '200',
+              color: 'white',
+            }}>
+            {' '}
+            {this.state.email}
+          </Text>
+          <Text
+            style={{
+              marginTop: 10,
+              fontWeight: '200',
+              color: 'white',
+            }}>
+            {this.state.mobile}
+          </Text>
+          <SpinnerButton
+            spinnerType="UIActivityIndicator"
+            buttonStyle={styles.buttonStyle}
+            isLoading={this.state.defaultLoading}
+            onPress={() => {
+              this.setState({ defaultLoading: true });
+              this.CheckTextInput();
+            }}>
+            <Text style={styles.textSign}>Log Out</Text>
+          </SpinnerButton>
+        </View>
+      );
   }
 }
 

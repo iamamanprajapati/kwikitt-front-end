@@ -35,7 +35,7 @@ const Banner = () => {
       >
         <Image
           style={styles.card}
-          source={data.coverImageUri }
+          source={data.coverImageUri}
         />
         <View
           style={[
@@ -43,14 +43,10 @@ const Banner = () => {
             { backgroundColor: data.cornerLabelColor },
           ]}
         >
-          <Text style={styles.cornerLabelText}>
-            { data.cornerLabelText }
-          </Text>
         </View>
       </View>
     </View>
   );
-
   return (
     <View style={styles.container}>
       <Carousel
@@ -82,24 +78,15 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   card: {
-    width: width ,
+    width: width,
     height: 170,
-    marginTop:2
+    marginTop: 2,
   },
   cornerLabel: {
     position: 'absolute',
     bottom: 0,
     right: 0,
     borderTopLeftRadius: 8,
-  },
-  cornerLabelText: {
-    fontSize: 12,
-    color: '#fff',
-    fontWeight: '600',
-    paddingLeft: 5,
-    paddingRight: 5,
-    paddingTop: 2,
-    paddingBottom: 2,
   },
 });
 

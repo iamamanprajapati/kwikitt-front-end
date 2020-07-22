@@ -93,9 +93,9 @@ export class Partner extends Component {
     }
   }
 
-  RenderReview = (id, bookingStatus, name, time, image, address, feedback, userId) => {
+  RenderReview = (id, bookingStatus, name, time, image, address, feedback, usersByCustomer) => {
     this.StoreOrderId(id);
-    this.props.navigation.navigate('ChangeBookingStatus', { id: id, bookingStatus: bookingStatus, name: name, time: time, image: image, address: address, feedback: feedback, userId: userId })
+    this.props.navigation.navigate('ChangeBookingStatus', { id: id, bookingStatus: bookingStatus, name: name, time: time, image: image, address: address, feedback: feedback, usersByCustomer: usersByCustomer })
   }
 
   hideAlert = () => {
@@ -141,17 +141,14 @@ export class Partner extends Component {
                   style={{ flex: 1, flexDirection: 'column-reverse' }}>
                   <ImageBackground
                     style={{
-                      marginTop: 5,
-                      marginLeft: 5,
-                      marginRight: 5,
                       backgroundColor: 'white',
                       borderWidth: 0,
                       borderColor: 'white',
-                      marginTop: 4,
+                      marginTop: 2,
                       elevation: 4,
                       height: 150,
                     }}>
-                    <TouchableNativeFeedback onPress={() => this.RenderReview(list.id, list.bookingStatus, list.service.name, list.bookingDate / 1000, list.service.serviceImage, list.address, list.feedback, list.usersByCustomer.name)} >
+                    <TouchableNativeFeedback onPress={() => this.RenderReview(list.id, list.bookingStatus, list.service.name, list.bookingDate / 1000, list.service.serviceImage, list.address, list.feedback, list.usersByCustomer)} >
                       <View style={{ flex: 1, flexDirection: 'column' }}>
                         <View style={{ flex: 3, flexDirection: 'row' }}>
                           <View style={{ flex: 2 }}>

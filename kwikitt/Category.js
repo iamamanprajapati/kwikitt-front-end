@@ -23,7 +23,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import PushNotification from 'react-native-push-notification';
 
 const Width = Dimensions.get('window').width;
-const W1 = Width / 2 - 5;
+const W1 = Width / 2 - 1;
 
 function wait(timeout) {
   return new Promise((resolve) => {
@@ -136,18 +136,16 @@ export class CategoryScreen extends Component {
                 flex: 1,
                 flexDirection: 'row',
                 flexWrap: 'wrap',
-                justifyContent: 'space-around',
-                padding: 3,
+                justifyContent: 'space-between',
               }}>
               {data.map((list) => (
                 <ImageBackground
                   style={{
                     width: W1,
                     height: 200,
-                    justifyContent: 'center',
                     backgroundColor: 'white',
                     elevation: 4,
-                    marginTop: 1,
+                    marginTop: 2,
                   }}>
                   <TouchableNativeFeedback
                     background={TouchableNativeFeedback.Ripple('#bfbfbf')}
@@ -156,7 +154,7 @@ export class CategoryScreen extends Component {
                       <Image
                         style={{
                           width: 150,
-                          height: 160,
+                          height: 163,
                           alignSelf: 'center',
                           elevation: 4,
                         }}
