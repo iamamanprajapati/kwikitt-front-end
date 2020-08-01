@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
   ImageBackground,
   Image,
   ScrollView,
@@ -17,6 +16,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import { createStackNavigator } from '@react-navigation/stack'
 import ChangeBookingStatus from '../Partner/ChangeBookingStatus'
 import Help from '../Partner/Help'
+import MessageForRejection from '../Partner/MessageForRejection'
 
 
 export class Partner extends Component {
@@ -50,6 +50,8 @@ export class Partner extends Component {
         return 'Active';
       case 'INACTIVE':
         return 'Inactive';
+      case 'CANCELLED':
+        return 'Cancelled'
       default:
         return bookingStatus;
     }
@@ -61,6 +63,7 @@ export class Partner extends Component {
       const r = await AsyncStorage.getItem('role');
       const abcd = JSON.parse(value);
       this.setState({ userId: abcd });
+      this.setState({ isLoading: true })
       const id = this.state.userId;
       axios
         .get(`${global.MyVar}/booking/list/partner/${id}`)
@@ -84,18 +87,19 @@ export class Partner extends Component {
     } catch (e) { }
   };
 
-  StoreOrderId = async (value) => {
-    console.log(value)
+  StoreOrderId = async (id, bookingStatus) => {
+    console.log(id)
     try {
-      await AsyncStorage.setItem('bookingId', JSON.stringify(value));
+      await AsyncStorage.setItem('bookingId', JSON.stringify(id));
+      await AsyncStorage.setItem('bookingStatus', bookingStatus)
     } catch (e) {
       console.warn(e);
     }
   }
 
   RenderReview = (id, bookingStatus, name, time, image, address, feedback, usersByCustomer) => {
-    this.StoreOrderId(id);
-    this.props.navigation.navigate('ChangeBookingStatus', { id: id, bookingStatus: bookingStatus, name: name, time: time, image: image, address: address, feedback: feedback, usersByCustomer: usersByCustomer })
+    this.StoreOrderId(id, bookingStatus);
+    this.props.navigation.navigate('ChangeBookingStatus', { id: id, name: name, time: time, image: image, address: address, feedback: feedback, usersByCustomer: usersByCustomer })
   }
 
   hideAlert = () => {
@@ -109,6 +113,7 @@ export class Partner extends Component {
   };
 
   componentDidMount() {
+
     this._unsubscribe = this.props.navigation.addListener('focus', () =>
       this.refreshComponent()
     );
@@ -152,14 +157,14 @@ export class Partner extends Component {
                       <View style={{ flex: 1, flexDirection: 'column' }}>
                         <View style={{ flex: 3, flexDirection: 'row' }}>
                           <View style={{ flex: 2 }}>
-                            <Text style={{ fontSize: 16, marginLeft: 10 }}>
+                            <Text style={{ fontSize: 15, marginLeft: 10, marginTop: 10, fontWeight: 'bold' }}>
                               {list.service.name}
                             </Text>
                             <Text>{list.rating}</Text>
                             <Text
                               style={{
                                 marginLeft: 10,
-                                marginTop: 10,
+                                marginTop: 7,
                                 fontSize: 10,
                                 color: 'green',
                               }}>
@@ -230,6 +235,7 @@ export class PartnerScreen extends Component {
         <Stack.Screen name="PartnerScreen" component={Partner} />
         <Stack.Screen name="ChangeBookingStatus" component={ChangeBookingStatus} />
         <Stack.Screen name="Help" component={Help} />
+        <Stack.Screen name="MessageForRejection" component={MessageForRejection} />
       </Stack.Navigator>
     )
   }

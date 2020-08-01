@@ -27,6 +27,7 @@ class ChangeBookingStatus extends Component {
       userId: null,
       review: '',
       isLoading: true,
+      bookingStatus: ''
     };
   }
 
@@ -40,6 +41,7 @@ class ChangeBookingStatus extends Component {
   };
 
   componentDidMount() {
+    this.setState({ isLoading: true })
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton)
     this._unsubscribe = this.props.navigation.addListener('focus', () =>
       this.refreshComponent(),
@@ -55,9 +57,11 @@ class ChangeBookingStatus extends Component {
     try {
       const bookingId = await AsyncStorage.getItem('bookingId');
       const userId = await AsyncStorage.getItem('token');
+      const bookStatus = await AsyncStorage.getItem('bookingStatus');
       const userId1 = JSON.parse(userId);
+      console.log(bookStatus)
       console.log(userId1)
-      this.setState({ userId: userId1 })
+      this.setState({ userId: userId1, bookingStatus: bookStatus })
       const bookingId1 = JSON.parse(bookingId);
       console.log('run')
       axios.get(`${global.MyVar}/booking/${bookingId1}`)
@@ -66,7 +70,7 @@ class ChangeBookingStatus extends Component {
             this.setState({
               starCount: 0,
               review: '',
-              isLoading: false
+              isLoading: false,
             })
           }
           else {
@@ -180,7 +184,7 @@ class ChangeBookingStatus extends Component {
   }
 
   getContactOfPartner = (bookingStatus, usersByCustomer) => {
-    if (bookingStatus === "BOOKED" || bookingStatus === "ACCEPTED" || bookingStatus === "CANCEL" || bookingStatus === "REJECTED" || bookingStatus === "DONE") {
+    if (bookingStatus === "BOOKED" || bookingStatus === "ACCEPTED" || bookingStatus === "CANCELLED" || bookingStatus === "REJECTED" || bookingStatus === "DONE") {
       return (
         <View style={{ height: 0 }}>
         </View>
@@ -223,32 +227,40 @@ class ChangeBookingStatus extends Component {
       isLoading: true
     })
     axios.post(`${global.MyVar}/booking/update/status/${id}`, {
-      status,
-    }
-    )
+      message: "",
+      status: status,
+    })
       .then(response => {
-        this.refreshComponent();
+        this.setState({ bookingStatus: status, isLoading: false })
+        this.render();
       })
   }
 
-  RejectOrInprogress = (bookingStatus, id) => {
-    if (bookingStatus === "ASSIGNED_TO_PARTNER") {
+  changeStatusToReject = (id, reject) => {
+    this.props.navigation.navigate('MessageForRejection', {
+      id: id,
+      reject: reject
+    })
+  }
+
+  RejectOrInprogress = (id) => {
+    if (this.state.bookingStatus === "ASSIGNED_TO_PARTNER") {
       return (
         <View style={{ flexDirection: 'row', flex: 1, marginTop: 20 }}>
+          <View style={{ flex: .5, justifyContent: 'center', alignItems: 'center' }}>
+            <TouchableOpacity
+              onPress={() => this.changeStatusToReject(id, "REJECTED")}
+              style={{ alignItems: 'center', justifyContent: 'center', borderWidth: 1, height: 45, width: Width2, backgroundColor: '#ff3333', borderRadius: 5, borderColor: 'white' }}><Text style={{ color: 'white' }}>Reject</Text></TouchableOpacity>
+          </View>
           <View style={{ flex: .5, justifyContent: 'center', alignItems: 'center' }}>
             <TouchableOpacity
               onPress={() => this.changeStatus(id, "IN_PROGRESS")}
               style={{ alignItems: 'center', justifyContent: 'center', borderWidth: 1, height: 45, width: Width2, backgroundColor: 'green', borderRadius: 5, borderColor: 'white' }}><Text style={{ color: 'white' }}>In Progress</Text></TouchableOpacity>
           </View>
-          <View style={{ flex: .5, justifyContent: 'center', alignItems: 'center' }}>
-            <TouchableOpacity
-              onPress={() => this.changeStatus(id, "REJECT")}
-              style={{ alignItems: 'center', justifyContent: 'center', borderWidth: 1, height: 45, width: Width2, backgroundColor: '#ff3333', borderRadius: 5, borderColor: 'white' }}><Text style={{ color: 'white' }}>Reject</Text></TouchableOpacity>
-          </View>
         </View>
       )
     }
-    else if (bookingStatus === "IN_PROGRESS") {
+    else if (this.state.bookingStatus === "IN_PROGRESS") {
       return (
         <View style={{ flexDirection: 'row', flex: 1, marginTop: 20 }}>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -261,9 +273,8 @@ class ChangeBookingStatus extends Component {
     }
   }
 
-
   render() {
-    const { id, bookingStatus, name, time, image, address, feedback, usersByCustomer } = this.props.route.params
+    const { id, name, time, image, address, feedback, usersByCustomer } = this.props.route.params
     const { isLoading } = this.state
     return isLoading === true ? (
 
@@ -334,11 +345,11 @@ class ChangeBookingStatus extends Component {
             }}
           />
           {
-            this.getContactOfPartner(bookingStatus, usersByCustomer)
+            this.getContactOfPartner(this.state.bookingStatus, usersByCustomer)
           }
 
           {
-            this.getRating(feedback, bookingStatus)
+            this.getRating(feedback, this.state.bookingStatus)
           }
           {this.getReview(this.state.review)}
           <View style={{ height: 50, justifyContent: 'center' }}>
@@ -351,12 +362,11 @@ class ChangeBookingStatus extends Component {
             }}
           />
           {
-            this.RejectOrInprogress(bookingStatus, id)
+            this.RejectOrInprogress(id)
           }
         </ScrollView>
       )
   }
 }
-
 
 export default ChangeBookingStatus;

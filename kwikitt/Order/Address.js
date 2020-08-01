@@ -57,7 +57,6 @@ export class Address extends Component {
             showAlert: true,
           });
         });
-
       axios.get(`${global.MyVar}/service/${serviceId}`).then((response) => {
         this.setState({
           names: response.data.name,

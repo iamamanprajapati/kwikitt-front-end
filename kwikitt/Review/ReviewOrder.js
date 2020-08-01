@@ -11,6 +11,7 @@ import { Icon } from 'react-native-elements';
 
 const labels = ["Booked", "Accepted", "Assigned to Partner", "In Progress", "Done"];
 const rejectLabels = ["Booked", "Rejected"];
+const cancelLabels = ["Booked", "Cancelled"]
 
 const Width = Dimensions.get('window').width;
 const Width1 = (Width) - 50
@@ -74,7 +75,8 @@ class ReviewOrder extends Component {
       starCount: 0,
       userId: null,
       review: '',
-      isLoading: true
+      isLoading: true,
+      bookingStatus: ''
     };
   }
 
@@ -116,9 +118,11 @@ class ReviewOrder extends Component {
     try {
       const bookingId = await AsyncStorage.getItem('bookingId');
       const userId = await AsyncStorage.getItem('token');
+      const bookStatus = await AsyncStorage.getItem('bookingStatus');
+      console.log(bookStatus);
       const userId1 = JSON.parse(userId);
       console.log(userId1)
-      this.setState({ userId: userId1 })
+      this.setState({ userId: userId1, bookingStatus: bookStatus })
       const bookingId1 = JSON.parse(bookingId);
       console.log('run')
       axios.get(`${global.MyVar}/booking/${bookingId1}`)
@@ -226,7 +230,8 @@ class ReviewOrder extends Component {
   }
 
   StepIndicator = (bookingStatus) => {
-    if (bookingStatus !== "REJECTED") {
+    console.log(bookingStatus)
+    if (bookingStatus !== "REJECTED" && bookingStatus !== "CANCELLED") {
       return (
         <View style={{ height: 200 }}>
           <StepIndicator
@@ -240,17 +245,32 @@ class ReviewOrder extends Component {
       )
     }
     else {
-      return (
-        <View style={{ height: 75 }}>
-          <StepIndicator
-            stepCount={2}
-            customStyles={customStylesRejection}
-            currentPosition={2}
-            labels={rejectLabels}
-            direction="vertical"
-          />
-        </View>
-      )
+      if (bookingStatus === "REJECTED") {
+        return (
+          <View style={{ height: 75 }}>
+            <StepIndicator
+              stepCount={2}
+              customStyles={customStylesRejection}
+              currentPosition={2}
+              labels={rejectLabels}
+              direction="vertical"
+            />
+          </View>
+        )
+      }
+      else {
+        return (
+          <View style={{ height: 75 }}>
+            <StepIndicator
+              stepCount={2}
+              customStyles={customStylesRejection}
+              currentPosition={2}
+              labels={cancelLabels}
+              direction="vertical"
+            />
+          </View>
+        )
+      }
     }
   }
 
@@ -269,7 +289,7 @@ class ReviewOrder extends Component {
   };
 
   getContactOfPartner = (bookingStatus, usersByPartner) => {
-    if (bookingStatus === "BOOKED" || bookingStatus === "ACCEPTED" || bookingStatus === "CANCEL" || bookingStatus === "REJECTED" || bookingStatus === "DONE") {
+    if (bookingStatus === "BOOKED" || bookingStatus === "ACCEPTED" || bookingStatus === "CANCELLED" || bookingStatus === "REJECTED" || bookingStatus === "DONE") {
       return (
         <View style={{ height: 0 }}>
         </View>
@@ -317,15 +337,20 @@ class ReviewOrder extends Component {
       isLoading: true
     })
     axios.post(`${global.MyVar}/booking/update/status/${id}`,
-      status
+      {
+        message: "",
+        status: status
+      }
     )
       .then(response => {
-        this.refreshComponent();
+        this.setState({ bookingStatus: status, isLoading: false })
+        this.render();
       })
   }
 
   CancelOrder = (bookingStatus, id) => {
-    if (bookingStatus === "DONE" || bookingStatus === "CANCEL" || bookingStatus === "REJECT") {
+    console.log(bookingStatus)
+    if (bookingStatus === "DONE" || bookingStatus === "CANCELLED" || bookingStatus === "REJECTED") {
       return (
         <View></View>
       )
@@ -334,7 +359,7 @@ class ReviewOrder extends Component {
       <View style={{ flexDirection: 'row', flex: 1, marginTop: 20 }}>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <TouchableOpacity
-            onPress={() => this.changeStatus(id, "CANCEL")}
+            onPress={() => this.changeStatus(id, "CANCELLED")}
             style={{ alignItems: 'center', justifyContent: 'center', borderWidth: 1, height: 45, width: Width1, backgroundColor: 'green', borderRadius: 5, borderColor: 'white' }}><Text style={{ color: 'white' }}>Cancel Order</Text></TouchableOpacity>
         </View>
       </View>
@@ -342,7 +367,7 @@ class ReviewOrder extends Component {
   }
 
   render() {
-    const { id, bookingStatus, name, time, image, address, feedback, usersByPartner } = this.props.route.params
+    const { id, name, time, image, address, feedback, usersByPartner } = this.props.route.params
     const { isLoading } = this.state
     return isLoading === true ? (
 
@@ -414,7 +439,7 @@ class ReviewOrder extends Component {
               }}
             />
             {
-              this.StepIndicator(bookingStatus)
+              this.StepIndicator(this.state.bookingStatus)
             }
             <View
               style={{
@@ -424,11 +449,11 @@ class ReviewOrder extends Component {
               }}
             />
             {
-              this.getContactOfPartner(bookingStatus, usersByPartner)
+              this.getContactOfPartner(this.state.bookingStatus, usersByPartner)
             }
 
             {
-              this.getRating(id, this.state.review, this.state.starCount, bookingStatus)
+              this.getRating(id, this.state.review, this.state.starCount, this.state.bookingStatus)
             }
             {this.getReview(this.state.review)}
             <View style={{ height: 50, justifyContent: 'center' }}>
@@ -441,7 +466,7 @@ class ReviewOrder extends Component {
               }}
             />
             {
-              this.CancelOrder(bookingStatus, id)
+              this.CancelOrder(this.state.bookingStatus, id)
             }
           </ScrollView>
         </View>

@@ -48,9 +48,6 @@ class AddAddress extends Component {
     BackHandler.removeEventListener("hardwareBackPress", this.backAction);
   }
 
-
-
-
   CheckTextInput = () => {
     if (this.state.street.length >= '2') {
       axios

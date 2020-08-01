@@ -49,23 +49,26 @@ export class Bookings extends Component {
         return 'Active';
       case 'INACTIVE':
         return 'Inactive';
+      case 'CANCELLED':
+        return 'Cancelled'
       default:
         return bookingStatus;
     }
   };
 
-  StoreOrderId = async (value) => {
-    console.log(value)
+  StoreOrderId = async (id,bookingStatus) => {
+    console.log(id)
     try {
-      await AsyncStorage.setItem('bookingId', JSON.stringify(value));
+      await AsyncStorage.setItem('bookingId', JSON.stringify(id));
+      await AsyncStorage.setItem('bookingStatus', bookingStatus);
     } catch (e) {
       console.warn(e);
     }
   }
 
   RenderReview = (id, bookingStatus, name, time, image, address, feedback, usersByPartner) => {
-    this.StoreOrderId(id);
-    this.props.navigation.navigate('ReviewOrder', { id: id, bookingStatus: bookingStatus, name: name, time: time, image: image, address: address, feedback: feedback, usersByPartner: usersByPartner })
+    this.StoreOrderId(id,bookingStatus);
+    this.props.navigation.navigate('ReviewOrder', { id: id, name: name, time: time, image: image, address: address, feedback: feedback, usersByPartner: usersByPartner })
   }
 
   getData = async () => {
@@ -73,6 +76,7 @@ export class Bookings extends Component {
       const value = await AsyncStorage.getItem('token');
       const abcd = JSON.parse(value);
       this.setState({ userId: abcd });
+      this.setState({isLoading:true})
       const id = this.state.userId;
       axios.get(`${global.MyVar}/booking/list/user/${id}`).then((response) => {
         console.log(response.data);
